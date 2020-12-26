@@ -1,5 +1,5 @@
+import { WorkspaceDefaultConfig } from './config/default.config';
 import { NoTabComponent } from './no-tab/no-tab.component';
-import { NgsWorkspaceService } from './ngs-workspace.service';
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { NgsWorkspaceComponent } from './ngs-workspace.component';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -37,7 +37,7 @@ export class NgsWorkspaceModule {
     return {
       ngModule: NgsWorkspaceModule,
       providers: [
-        NgsWorkspaceService,
+        WorkspaceDefaultConfig,
         { provide: CONFIG, useValue: config }
       ]
     };

@@ -37,7 +37,7 @@ import { NgsWorkspaceService } from './ngs-workspace.service';
 })
 export class NgsWorkspaceComponent implements AfterViewInit {
   @HostBinding('style.width')
-  width: string = String(WorkspaceDefaultConfig.config.width);
+  width: string = String(this.defaults.config.width);
   @HostBinding('@slideInOut')
   get getSlideInOut(): string {
     return this.workspaceService.slide.getValue();
@@ -49,9 +49,10 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   containers: QueryList<ViewContainerRef>;
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
-  config: WorkspaceConfig<any> = WorkspaceDefaultConfig.config;
+  config: WorkspaceConfig<any> = this.defaults.config;
   constructor(
     private workspaceService: NgsWorkspaceService,
+    private defaults: WorkspaceDefaultConfig,
     private cfr: ComponentFactoryResolver,
     private cdr: ChangeDetectorRef,
     @Optional() private router: Router

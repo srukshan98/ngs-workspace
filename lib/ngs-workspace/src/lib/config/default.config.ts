@@ -1,6 +1,12 @@
 import { NoTabComponent } from './../no-tab/no-tab.component';
 import { WorkspaceConfig } from '../models/workspace-config.model';
+import { Inject, Injectable, Optional } from '@angular/core';
+import { IWorkspaceConfig } from '../models/i-workspace.config';
+import { CONFIG } from '../models/workspace-config.token';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class WorkspaceDefaultConfig {
   private static defaults: WorkspaceConfig<any> = {
     title: 'Untitled ($$)',
@@ -12,11 +18,15 @@ export class WorkspaceDefaultConfig {
     placeholderComponent: NoTabComponent
   };
 
-  static get config(): WorkspaceConfig<any> {
-    return { ...this.defaults };
+  get config(): WorkspaceConfig<any> {
+    return { ...WorkspaceDefaultConfig.defaults };
   }
 
-  public static setDefaults(config: WorkspaceConfig<any>): void {
-    WorkspaceDefaultConfig.defaults = { ...WorkspaceDefaultConfig.defaults, ...config };
+  constructor(
+    @Optional() @Inject(CONFIG) config: IWorkspaceConfig,
+  ) {
+    if (config) {
+      WorkspaceDefaultConfig.defaults = { ...WorkspaceDefaultConfig.defaults, ...config };
+    }
   }
 }
