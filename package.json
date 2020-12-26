@@ -30,7 +30,7 @@
     "npm-pack": "cd dist/ngs-workspace && npm pack",
     "pack": "npm run build-lib && npm run npm-pack"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "~9.1.11",
     "@angular/cdk": "^9.2.4",

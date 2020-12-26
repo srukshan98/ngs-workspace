@@ -1,24 +1,12 @@
-# NgsWorkspace
+# <div align="center"> Angular Smart Workspace </div>
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.13.
+![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/srukshan98)
+[![GitHub issues](https://img.shields.io/github/issues/srukshan98/ngs-workspace)](https://github.com/srukshan98/ngs-workspace/issues)
+[![GitHub license](https://img.shields.io/github/license/srukshan98/ngs-workspace)](https://github.com/srukshan98/ngs-workspace)
 
-## Code scaffolding
+This Library introduces an Intelligent way to hold your components dynamically in a tabular format in a modern side panel.
 
-Run `ng generate component component-name --project ngs-workspace` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngs-workspace`.
-> Note: Don't forget to add `--project ngs-workspace` or else it will be added to the default project in your `angular.json` file. 
+## More Information
 
-## Build
-
-Run `ng build ngs-workspace` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build ngs-workspace`, go to the dist folder `cd dist/ngs-workspace` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test ngs-workspace` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+#### Coming Soon
