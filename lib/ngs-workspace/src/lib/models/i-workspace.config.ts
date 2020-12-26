@@ -1,9 +1,9 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { IWorkspaceConfig } from './i-workspace.config';
-export class WorkspaceConfig<D> implements IWorkspaceConfig {
+
+
+export class IWorkspaceConfig {
   title?: string;
   minimizeOnNavigation?: boolean;
-  data?: D | null;
   disableClose?: boolean;
   maxWidth?: number | string;
   minWidth?: number | string;

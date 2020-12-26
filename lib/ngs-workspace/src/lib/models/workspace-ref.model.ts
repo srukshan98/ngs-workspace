@@ -5,7 +5,7 @@ import { WorkspaceConfig } from './workspace-config.model';
 import { WorkspaceTabRef } from './workspace-tab-ref.model';
 
 export class WorkspaceRef<T, D, R> extends WorkspaceTabRef<T, R> {
-  private static currentReferenceNumber: number = 0;
+  private static currentReferenceNumber = 0;
   componentRef: ComponentRef<T>;
   get instance(): T {
     if (this.componentRef) {

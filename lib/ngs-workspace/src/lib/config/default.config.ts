@@ -1,3 +1,4 @@
+import { NoTabComponent } from './../no-tab/no-tab.component';
 import { WorkspaceConfig } from '../models/workspace-config.model';
 
 export class WorkspaceDefaultConfig {
@@ -8,7 +9,7 @@ export class WorkspaceDefaultConfig {
     minWidth: '40vw',
     minimizeOnNavigation: false,
     width: '70vw',
-    placeholderComponent: null
+    placeholderComponent: NoTabComponent
   };
 
   static get config(): WorkspaceConfig<any> {

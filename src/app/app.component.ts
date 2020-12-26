@@ -20,9 +20,12 @@ export class AppComponent {
     }
   }
 
-  openTab(): void {
-    this.workspaceService.open(TabComponent, {
-      title: 'New Tab ($$)',
+  openTab(count = true): void {
+    const ref = this.workspaceService.open(TabComponent, {
+      title: 'New Tab' + (count ? ' ($$)' : ''),
+    });
+    ref.onClose().subscribe((r) => {
+      console.log(r);
     });
   }
 }

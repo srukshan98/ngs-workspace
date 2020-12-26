@@ -19,6 +19,7 @@ import { slideInOutAnimation } from './animations/slide-in-out.animation';
 import { WorkspaceDefaultConfig } from './config/default.config';
 import { WorkspaceConfig } from './models/workspace-config.model';
 import { WORKSPACE_DATA } from './models/workspace-data.token';
+import { WorkspaceErrorTypes } from './models/workspace-error.types';
 import { WorkspaceRef } from './models/workspace-ref.model';
 import { WorkspaceTabRef } from './models/workspace-tab-ref.model';
 import { NgsWorkspaceService } from './ngs-workspace.service';
@@ -47,7 +48,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   })
   containers: QueryList<ViewContainerRef>;
   references: WorkspaceRef<any, any, any>[] = [];
-  selectedTabIndex: number = -1;
+  selectedTabIndex = -1;
   config: WorkspaceConfig<any> = WorkspaceDefaultConfig.config;
   constructor(
     private workspaceService: NgsWorkspaceService,
@@ -69,47 +70,56 @@ export class NgsWorkspaceComponent implements AfterViewInit {
     }
     this.workspaceService.referenceSubject.subscribe((reference: WorkspaceRef<any, any, any>) => {
       if (reference == null) { return; }
-      if (this.references.length === 0) {
-        this.references.push(null);
+      try {
+        if (this.references.length === 0) {
+          this.references.push(null);
+        }
+        if (this.references.some(v => v && v.config.title === reference.config.title)) {
+          this.delayedClose(reference, {
+            error: WorkspaceErrorTypes.Warning,
+            message: 'Similar workspace detected'
+          });
+          return;
+        }
+        this.references.push(reference);
+        const index: number = this.references.length - 1;
+        if (this.references[index - 1] == null) {
+          this.selectedTabIndex = index - 1;
+        }
+        this.cdr.detectChanges();
+        reference.close = (data?: any) => this.onClose(reference, data);
+        const container: ViewContainerRef = this.containers.toArray()[index];
+        const injector: Injector = Injector.create({
+          providers: [
+            {
+              provide: WorkspaceTabRef,
+              useValue: reference
+            },
+            {
+              provide: WORKSPACE_DATA,
+              useValue: reference.config.data
+            }
+          ]
+        });
+        const factory: ComponentFactory<any> = this.cfr.resolveComponentFactory(reference.component);
+        const cr: ComponentRef<any> = container.createComponent(factory, 0, injector);
+        this.selectedTabIndex = index;
+        if (this.references[index - 1] == null) {
+          this.references.shift();
+        }
+        reference.componentRef = cr;
+        this.workspaceService.slide.next('out');
+        reference.OpenChanges.next();
+        reference.TabVisitChanges.next(cr.instance);
       }
-      if (this.references.some(v => v && v.config.title === reference.config.title)) {
-        // this.toaster.open({
-        //   text: 'Similar workspace detected',
-        //   caption: 'Warning',
-        //   type: 'warning'
-        // });
-        return;
+      catch (e) {
+        this.delayedClose(reference, e);
       }
-      this.references.push(reference);
-      const index: number = this.references.length - 1;
-      if (this.references[index - 1] == null) {
-        this.selectedTabIndex = index - 1;
-      }
-      this.cdr.detectChanges();
-      reference.close = (data?: any) => this.onClose(reference, data);
-      const container: ViewContainerRef = this.containers.toArray()[index];
-      const injector: Injector = Injector.create({
-        providers: [
-          {
-            provide: WorkspaceTabRef,
-            useValue: reference
-          },
-          {
-            provide: WORKSPACE_DATA,
-            useValue: reference.config.data
-          }
-        ]
-      });
-      const factory: ComponentFactory<any> = this.cfr.resolveComponentFactory(reference.component);
-      const cr: ComponentRef<any> = container.createComponent(factory, 0, injector);
-      this.selectedTabIndex = index;
-      if (this.references[index - 1] == null) {
-        this.references.shift();
-      }
-      reference.componentRef = cr;
-      reference.OpenChanges.next();
-      reference.TabVisitChanges.next(cr.instance);
     });
+  }
+
+  private delayedClose(reference: WorkspaceRef<any, any, any>, e: any) {
+    setTimeout(() => this.onClose(reference, e), 10);
   }
 
   tabChange(event: MatTabChangeEvent): void {
@@ -128,8 +138,12 @@ export class NgsWorkspaceComponent implements AfterViewInit {
 
   onClose(ref: WorkspaceRef<any, any, any>, data?: any): void {
     const index: number = this.references.findIndex((v: WorkspaceRef<any, any, any>) => v === ref);
-    this.references.splice(index, 1);
-    ref.componentRef.destroy();
+    if (index !== -1) {
+      this.references.splice(index, 1);
+    }
+    if (ref.componentRef) {
+      ref.componentRef.destroy();
+    }
     ref.TabVisitChanges.complete();
     ref.TabLeaveChanges.complete();
     ref.OpenChanges.complete();
