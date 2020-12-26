@@ -1,6 +1,24 @@
 {
   "name": "ngs-workspace",
   "version": "0.0.3",
+  "description": "Smart Workspace to allow users to multitask with a cool side panel",
+  "author": {
+    "email": "sachithrukshanmail@gmail.com",
+    "name": "Sachith Rukshan",
+    "url": "https://srukshan98.github.io/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srukshan98/ngs-workspace"
+  },
+  "bugs": "https://github.com/srukshan98/ngs-workspace/issues",
+  "keywords": [
+    "angular",
+    "typescript",
+    "workspace",
+    "angular-material"
+  ],
+  "license": "MIT",
   "peerDependencies": {
     "@angular/animations": "^9.1.11",
     "@angular/cdk": "^9.2.4",
