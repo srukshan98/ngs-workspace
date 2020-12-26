@@ -11,10 +11,14 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "lib": [
-      "es2018",
-      "dom"
-    ]
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "ngs-workspace": [
+        "dist/ngs-workspace/ngs-workspace",
+        "dist/ngs-workspace",
+        "lib/ngs-workspace/src/public-api.ts"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
