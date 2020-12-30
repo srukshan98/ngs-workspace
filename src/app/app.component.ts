@@ -25,7 +25,7 @@ export class AppComponent {
       title: 'New Tab' + (count ? ' ($$)' : ''),
       data: {
         name: 'Harrison'
-      }
+      },
     });
     ref.onClose().subscribe((r) => {
       console.log(r);

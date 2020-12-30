@@ -2,7 +2,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { WorkspaceDefaultConfig } from './config/default.config';
-import { WorkspaceConfig } from './models/workspace-config.model';
+import { IWorkspaceTabConfig } from './models/i-workspace-tab-config';
 import { WorkspaceRef } from './models/workspace-ref.model';
 import { WorkspaceTabRef } from './models/workspace-tab-ref.model';
 
@@ -16,7 +16,7 @@ export class NgsWorkspace {
   }
   slide: BehaviorSubject<'in' | 'out'> = new BehaviorSubject<'in' | 'out'>('in');
   referenceSubject: BehaviorSubject<WorkspaceRef<any, any, any>> = new BehaviorSubject(null);
-  open<T, D, R>(template: ComponentType<T>, config?: WorkspaceConfig<D>): WorkspaceTabRef<T, R> {
+  open<T, D, R>(template: ComponentType<T>, config?: IWorkspaceTabConfig<D>): WorkspaceTabRef<T, R> {
     const workspaceRef: WorkspaceRef<T, D, R> = new WorkspaceRef<T, D, R>(
       template,
       { ...this.defaults.config, ...config }

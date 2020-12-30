@@ -1,6 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
+import { IWorkspaceTabConfig } from './i-workspace-tab-config';
 import { IWorkspaceConfig } from './i-workspace.config';
-export class WorkspaceConfig<D> implements IWorkspaceConfig {
+export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig<D> {
   title?: string;
   minimizeOnNavigation?: boolean;
   data?: D | null;
