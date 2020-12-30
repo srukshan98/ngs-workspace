@@ -22,7 +22,7 @@ import { WORKSPACE_DATA } from './models/workspace-data.token';
 import { WorkspaceErrorTypes } from './models/workspace-error.types';
 import { WorkspaceRef } from './models/workspace-ref.model';
 import { WorkspaceTabRef } from './models/workspace-tab-ref.model';
-import { NgsWorkspaceService } from './ngs-workspace.service';
+import { NgsWorkspace } from './ngs-workspace.service';
 
 @Component({
   selector: 'ngs-workspace',
@@ -51,7 +51,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   selectedTabIndex = -1;
   config: WorkspaceConfig<any> = this.defaults.config;
   constructor(
-    private workspaceService: NgsWorkspaceService,
+    private workspaceService: NgsWorkspace,
     private defaults: WorkspaceDefaultConfig,
     private cfr: ComponentFactoryResolver,
     private cdr: ChangeDetectorRef,

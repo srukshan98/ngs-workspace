@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { WORKSPACE_DATA, WorkspaceTabRef } from 'ngs-workspace';
+import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-tab',
@@ -7,7 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TabComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    @Inject(WORKSPACE_DATA) public data: { name: string; },
+    private ref: WorkspaceTabRef<TabComponent>
+  ) { }
 
   ngOnInit(): void {
   }

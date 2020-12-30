@@ -1,5 +1,5 @@
 import { TabComponent } from './tab/tab.component';
-import { NgsWorkspaceService } from 'ngs-workspace';
+import { NgsWorkspace } from 'ngs-workspace';
 import { Component } from '@angular/core';
 
 @Component({
@@ -9,20 +9,23 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   constructor(
-    private workspaceService: NgsWorkspaceService
+    private workspace: NgsWorkspace
   ) { }
 
   toggleWorkspace(): void {
-    if (this.workspaceService.slide.getValue() === 'in') {
-      this.workspaceService.slide.next('out');
+    if (this.workspace.slide.getValue() === 'in') {
+      this.workspace.slide.next('out');
     } else {
-      this.workspaceService.slide.next('in');
+      this.workspace.slide.next('in');
     }
   }
 
   openTab(count = true): void {
-    const ref = this.workspaceService.open(TabComponent, {
+    const ref = this.workspace.open(TabComponent, {
       title: 'New Tab' + (count ? ' ($$)' : ''),
+      data: {
+        name: 'Harrison'
+      }
     });
     ref.onClose().subscribe((r) => {
       console.log(r);

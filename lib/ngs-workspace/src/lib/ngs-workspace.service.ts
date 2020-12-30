@@ -9,7 +9,7 @@ import { WorkspaceTabRef } from './models/workspace-tab-ref.model';
 @Injectable({
   providedIn: 'root'
 })
-export class NgsWorkspaceService {
+export class NgsWorkspace {
   constructor(
     private defaults: WorkspaceDefaultConfig
   ) {

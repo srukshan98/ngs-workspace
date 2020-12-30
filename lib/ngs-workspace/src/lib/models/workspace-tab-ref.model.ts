@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 
 // @Injectable()
 
-export abstract class WorkspaceTabRef<T, R> {
+export abstract class WorkspaceTabRef<T, R = any> {
   referenceId: number;
   abstract onTabVisit(): Observable<T>;
   abstract onTabLeave(): Observable<void>;
