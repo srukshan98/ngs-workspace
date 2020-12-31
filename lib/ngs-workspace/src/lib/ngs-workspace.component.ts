@@ -84,7 +84,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
         }
         this.references.push(reference);
         const index: number = this.references.length - 1;
-        if (this.references[index - 1] == null) {
+        if ((this.references[index - 1] == null) || (this.selectedTabIndex == index)) {
           this.selectedTabIndex = index - 1;
         }
         this.cdr.detectChanges();
