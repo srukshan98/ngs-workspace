@@ -8,5 +8,6 @@ export class IWorkspaceConfig {
   maxWidth?: number | string;
   minWidth?: number | string;
   width?: number | string;
+  maxTabCount?: number;
   placeholderComponent?: ComponentType<any>;
 }

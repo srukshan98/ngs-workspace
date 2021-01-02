@@ -72,15 +72,24 @@ export class NgsWorkspaceComponent implements AfterViewInit {
     this.workspaceService.referenceSubject.subscribe((reference: WorkspaceRef<any, any, any>) => {
       if (reference == null) { return; }
       try {
-        if (this.references.length === 0) {
-          this.references.push(null);
-        }
         if (this.references.some(v => v && v.config.title === reference.config.title)) {
           this.delayedClose(reference, {
-            error: WorkspaceErrorTypes.Warning,
+            error: WorkspaceErrorTypes.Error,
             message: 'Similar workspace detected'
           });
           return;
+        }
+        if (this.config.maxTabCount !== -1) {
+          if (this.config.maxTabCount <= this.references.length) {
+            this.delayedClose(reference, {
+              error: WorkspaceErrorTypes.Error,
+              message: 'Maximum Tab Count Exceeded'
+            });
+            return;
+          }
+        }
+        if (this.references.length === 0) {
+          this.references.push(null);
         }
         this.references.push(reference);
         const index: number = this.references.length - 1;

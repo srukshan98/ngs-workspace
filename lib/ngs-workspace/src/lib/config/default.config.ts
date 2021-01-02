@@ -15,6 +15,7 @@ export class WorkspaceDefaultConfig {
     minWidth: '40vw',
     minimizeOnNavigation: false,
     width: '70vw',
+    maxTabCount: -1,
     placeholderComponent: NoTabComponent
   };
 
