@@ -89,6 +89,17 @@ export class YourWorkspaceTab {
 }
 ```
 
+## Versions
+
+### v0.1.0
+
+This update include several bug and performance enhancement.
+
+- Added a Workspace Container CSS Class
+- Now the component reference is exposed from WorkspaceTabRef
+- Default Error Enum is Deprecated
+- New Error Enum added with Better description
+
 ## API
 
 #### Coming Soon
