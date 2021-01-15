@@ -3,11 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
-  ComponentRef,
   HostBinding,
-  Injector,
   Optional,
   QueryList,
   ViewChildren,
@@ -18,10 +14,8 @@ import { Event, NavigationStart, Router } from '@angular/router';
 import { slideInOutAnimation } from './animations/slide-in-out.animation';
 import { WorkspaceDefaultConfig } from './config/default.config';
 import { WorkspaceConfig } from './models/workspace-config.model';
-import { WORKSPACE_DATA } from './models/workspace-data.token';
-import { WorkspaceErrorTypes } from './models/workspace-error.types';
+import { WorkspaceErrorTypes, WorkspaceErrorTypesV2 } from './models/workspace-error.types';
 import { WorkspaceRef } from './models/workspace-ref.model';
-import { WorkspaceTabRef } from './models/workspace-tab-ref.model';
 import { NgsWorkspace } from './ngs-workspace.service';
 
 @Component({
@@ -53,79 +47,71 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   constructor(
     private workspaceService: NgsWorkspace,
     private defaults: WorkspaceDefaultConfig,
-    private cfr: ComponentFactoryResolver,
     private cdr: ChangeDetectorRef,
     @Optional() private router: Router
   ) { }
 
   ngAfterViewInit(): void {
+    this.checkNavigationChanges();
+    this.workspaceService.referenceSubject.subscribe(async (reference: WorkspaceRef<any, any, any>) => {
+      if (reference == null) { return; }
+      try {
+        if (!this.isValidReference(reference)) return;
+
+        this.references.push(reference);
+        const index: number = this.references.length - 1;
+        reference.close = (data?: any) => this.onClose(reference, data);
+
+        this.cdr.detectChanges();
+        this.selectedTabIndex = index;
+
+        const container: ViewContainerRef = this.containers.toArray()[index];
+        container.insert(reference.componentRef.hostView);
+
+        this.workspaceService.slide.next('out');
+        reference.OpenChanges.next();
+        reference.TabVisitChanges.next(reference.componentRef.instance);
+      }
+      catch (e) {
+        this.delayedClose(reference, {
+          error: WorkspaceErrorTypes.Error,
+          errorV2: WorkspaceErrorTypesV2.CONSOLE_ERROR,
+          content: e
+        });
+      }
+    });
+  }
+  private checkNavigationChanges() {
     if (this.config.minimizeOnNavigation && this.router) {
       this.router.events.subscribe((e: Event) => {
-        if (
-          e instanceof NavigationStart &&
-          this.workspaceService.slide.value === 'out'
-        ) {
+        if (e instanceof NavigationStart &&
+          this.workspaceService.slide.value === 'out') {
           this.minimize();
         }
       });
     }
-    this.workspaceService.referenceSubject.subscribe((reference: WorkspaceRef<any, any, any>) => {
-      if (reference == null) { return; }
-      try {
-        if (this.references.some(v => v && v.config.title === reference.config.title)) {
-          this.delayedClose(reference, {
-            error: WorkspaceErrorTypes.Error,
-            message: 'Similar workspace detected'
-          });
-          return;
-        }
-        if (this.config.maxTabCount !== -1) {
-          if (this.config.maxTabCount <= this.references.length) {
-            this.delayedClose(reference, {
-              error: WorkspaceErrorTypes.Error,
-              message: 'Maximum Tab Count Exceeded'
-            });
-            return;
-          }
-        }
-        if (this.references.length === 0) {
-          this.references.push(null);
-        }
-        this.references.push(reference);
-        const index: number = this.references.length - 1;
-        if ((this.references[index - 1] == null) || (this.selectedTabIndex == index)) {
-          this.selectedTabIndex = index - 1;
-        }
-        this.cdr.detectChanges();
-        reference.close = (data?: any) => this.onClose(reference, data);
-        const container: ViewContainerRef = this.containers.toArray()[index];
-        const injector: Injector = Injector.create({
-          providers: [
-            {
-              provide: WorkspaceTabRef,
-              useValue: reference
-            },
-            {
-              provide: WORKSPACE_DATA,
-              useValue: reference.config.data
-            }
-          ]
+  }
+
+  isValidReference(reference: WorkspaceRef<any, any, any>) {
+    if (this.references.some(v => v && v.config.title === reference.config.title)) {
+      this.delayedClose(reference, {
+        error: WorkspaceErrorTypes.Error,
+        errorV2: WorkspaceErrorTypesV2.SIMILAR_TAB_ERROR,
+        message: 'Similar workspace detected'
+      });
+      return false;
+    }
+    if (this.config.maxTabCount !== -1) {
+      if (this.config.maxTabCount <= this.references.length) {
+        this.delayedClose(reference, {
+          error: WorkspaceErrorTypes.Error,
+          errorV2: WorkspaceErrorTypesV2.MAX_TAB_COUNT_EXCEEDED_ERROR,
+          message: 'Maximum Tab Count Exceeded'
         });
-        const factory: ComponentFactory<any> = this.cfr.resolveComponentFactory(reference.component);
-        const cr: ComponentRef<any> = container.createComponent(factory, 0, injector);
-        this.selectedTabIndex = index;
-        if (this.references[index - 1] == null) {
-          this.references.shift();
-        }
-        reference.componentRef = cr;
-        this.workspaceService.slide.next('out');
-        reference.OpenChanges.next();
-        reference.TabVisitChanges.next(cr.instance);
+        return false;
       }
-      catch (e) {
-        this.delayedClose(reference, e);
-      }
-    });
+    }
+    return true;
   }
 
   private delayedClose(reference: WorkspaceRef<any, any, any>, e: any) {
@@ -198,4 +184,10 @@ function getPxFromVw(value: string): number {
   value = value.replace('vw', '');
   const valueNum: number = parseFloat(value);
   return (document.documentElement.clientWidth / 100) * valueNum;
+}
+
+function delay(t) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve.bind(null), t);
+  });
 }

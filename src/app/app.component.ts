@@ -12,6 +12,9 @@ export class AppComponent {
     private workspace: NgsWorkspace
   ) { }
 
+  ngOnInit(): void {
+  }
+
   toggleWorkspace(): void {
     if (this.workspace.slide.getValue() === 'in') {
       this.workspace.slide.next('out');
@@ -27,6 +30,7 @@ export class AppComponent {
         name: 'Harrison'
       },
     });
+    ref.componentRef.instance.lastName = 'Wells';
     ref.onClose().subscribe((r) => {
       console.log(r);
     });

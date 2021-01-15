@@ -7,6 +7,7 @@ import { Component, Inject, OnInit } from '@angular/core';
   styleUrls: ['./tab.component.scss']
 })
 export class TabComponent implements OnInit {
+  lastName: string = '';
 
   constructor(
     @Inject(WORKSPACE_DATA) public data: { name: string; },
