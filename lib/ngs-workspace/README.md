@@ -91,6 +91,18 @@ export class YourWorkspaceTab {
 
 ## Versions
 
+### v0.1.1
+
+This Update include new feature and APIs
+
+- Added New APIs to service
+  - afterAllClosed
+  - afterOpen
+  - openWorkspaces
+  - closeAll method
+  - getWorkspaceById method
+- Global Error Handling added
+
 ### v0.1.0
 
 This update include several bug and performance enhancement.
