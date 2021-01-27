@@ -1,3 +1,4 @@
+import { WorkspaceErrorModel } from './models/workspace-error.model';
 import { CdkDragRelease } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
@@ -68,18 +69,23 @@ export class NgsWorkspaceComponent implements AfterViewInit {
         const container: ViewContainerRef = this.containers.toArray()[index];
         container.insert(reference.componentRef.hostView);
 
-        this.workspaceService.openWorkflows = [...this.references];
+        this.workspaceService.openWorkspaces = [...this.references];
         this.workspaceService.slide.next('out');
         reference.OpenChanges.next();
         reference.TabVisitChanges.next(reference.componentRef.instance);
         this.workspaceService.afterOpened.next(reference);
       }
       catch (e) {
-        this.delayedClose(reference, {
+        const err = {
           error: WorkspaceErrorTypes.Error,
           errorV2: WorkspaceErrorTypesV2.CONSOLE_ERROR,
           content: e
+        };
+        this.workspaceService.emitErrors.next({
+          ref: reference,
+          ...err
         });
+        this.delayedClose(reference, err);
       }
     });
   }
@@ -96,20 +102,30 @@ export class NgsWorkspaceComponent implements AfterViewInit {
 
   isValidReference(reference: WorkspaceRef<any, any, any>) {
     if (this.references.some(v => v && v.config.title === reference.config.title)) {
-      this.delayedClose(reference, {
+      const err = {
         error: WorkspaceErrorTypes.Error,
         errorV2: WorkspaceErrorTypesV2.SIMILAR_TAB_ERROR,
         message: 'Similar workspace detected'
+      };
+      this.workspaceService.emitErrors.next({
+        ref: reference,
+        ...err
       });
+      this.delayedClose(reference, err);
       return false;
     }
     if (this.config.maxTabCount !== -1) {
       if (this.config.maxTabCount <= this.references.length) {
-        this.delayedClose(reference, {
+        const err = {
           error: WorkspaceErrorTypes.Error,
           errorV2: WorkspaceErrorTypesV2.MAX_TAB_COUNT_EXCEEDED_ERROR,
           message: 'Maximum Tab Count Exceeded'
+        };
+        this.workspaceService.emitErrors.next({
+          ref: reference,
+          ...err
         });
+        this.delayedClose(reference, err);
         return false;
       }
     }
@@ -139,7 +155,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
     if (index !== -1) {
       this.references.splice(index, 1);
     }
-    this.workspaceService.openWorkflows = [...this.references];
+    this.workspaceService.openWorkspaces = [...this.references];
     if (ref.componentRef) {
       ref.componentRef.destroy();
     }

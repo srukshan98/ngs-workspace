@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { WorkspaceDefaultConfig } from './config/default.config';
 import { IWorkspaceTabConfig } from './models/i-workspace-tab-config';
 import { WORKSPACE_DATA } from './models/workspace-data.token';
+import { WorkspaceErrorModel } from './models/workspace-error.model';
 import { WorkspaceRef } from './models/workspace-ref.model';
 import { WorkspaceTabRef } from './models/workspace-tab-ref.model';
 
@@ -16,7 +17,8 @@ export class NgsWorkspace {
   afterAllClosedSubject: BehaviorSubject<void> = new BehaviorSubject<void>(null);
   afterAllClosed: Observable<void> = this.afterAllClosedSubject.asObservable();
   afterOpened: Subject<WorkspaceTabRef<any>> = new Subject<WorkspaceTabRef<any>>();
-  openWorkflows: WorkspaceTabRef<any>[] = [];
+  openWorkspaces: WorkspaceTabRef<any>[] = [];
+  emitErrors: Subject<WorkspaceErrorModel> = new Subject<WorkspaceErrorModel>();
   constructor(
     private defaults: WorkspaceDefaultConfig,
     private cfr: ComponentFactoryResolver,
@@ -53,10 +55,10 @@ export class NgsWorkspace {
   }
 
   closeAll(): void {
-    this.openWorkflows.forEach((workspace: WorkspaceTabRef<any>) => workspace.close());
+    this.openWorkspaces.forEach((workspace: WorkspaceTabRef<any>) => workspace.close());
   }
 
   getWorkspaceById<T>(id: number): WorkspaceTabRef<T> | undefined {
-    return this.openWorkflows.find((workspace: WorkspaceTabRef<any>) => workspace.referenceId === id);
+    return this.openWorkspaces.find((workspace: WorkspaceTabRef<any>) => workspace.referenceId === id);
   }
 }

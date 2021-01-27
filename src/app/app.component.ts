@@ -1,6 +1,7 @@
 import { TabComponent } from './tab/tab.component';
-import { NgsWorkspace } from 'ngs-workspace';
+import { NgsWorkspace, WorkspaceErrorModel } from 'ngs-workspace';
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   constructor(
-    private workspace: NgsWorkspace
+    private workspace: NgsWorkspace,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
+    this.workspace.emitErrors.subscribe((err: WorkspaceErrorModel) => {
+      if (err.message) {
+        this.snackBar.open(err.message);
+      }
+    });
   }
 
   toggleWorkspace(): void {
