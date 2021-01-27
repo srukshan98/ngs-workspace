@@ -53,10 +53,10 @@ export class NgsWorkspaceComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.checkNavigationChanges();
-    this.workspaceService.referenceSubject.subscribe(async (reference: WorkspaceRef<any, any, any>) => {
+    this.workspaceService.referenceSubject.subscribe((reference: WorkspaceRef<any, any, any>) => {
       if (reference == null) { return; }
       try {
-        if (!this.isValidReference(reference)) return;
+        if (!this.isValidReference(reference)) { return; }
 
         this.references.push(reference);
         const index: number = this.references.length - 1;
