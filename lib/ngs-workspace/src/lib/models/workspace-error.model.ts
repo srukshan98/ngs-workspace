@@ -1,4 +1,4 @@
-import { WorkspaceTabRef } from 'ngs-workspace';
+import { WorkspaceTabRef } from './workspace-tab-ref.model';
 import { WorkspaceErrorTypes, WorkspaceErrorTypesV2 } from './workspace-error.types';
 export interface WorkspaceErrorModel {
   ref: WorkspaceTabRef<any>;
