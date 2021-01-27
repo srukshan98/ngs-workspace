@@ -68,9 +68,11 @@ export class NgsWorkspaceComponent implements AfterViewInit {
         const container: ViewContainerRef = this.containers.toArray()[index];
         container.insert(reference.componentRef.hostView);
 
+        this.workspaceService.openWorkflows = [...this.references];
         this.workspaceService.slide.next('out');
         reference.OpenChanges.next();
         reference.TabVisitChanges.next(reference.componentRef.instance);
+        this.workspaceService.afterOpened.next(reference);
       }
       catch (e) {
         this.delayedClose(reference, {
@@ -137,6 +139,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
     if (index !== -1) {
       this.references.splice(index, 1);
     }
+    this.workspaceService.openWorkflows = [...this.references];
     if (ref.componentRef) {
       ref.componentRef.destroy();
     }
@@ -148,6 +151,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
     if (this.references.length === 0) {
       this.minimize();
       ref.resetAll();
+      this.workspaceService.afterAllClosedSubject.next();
     }
   }
 

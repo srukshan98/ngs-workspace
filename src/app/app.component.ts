@@ -35,4 +35,8 @@ export class AppComponent {
       console.log(r);
     });
   }
+
+  closeTabs(): void {
+    this.workspace.closeAll();
+  }
 }
