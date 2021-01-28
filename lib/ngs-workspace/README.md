@@ -4,13 +4,15 @@
 
 This Library introduces an Intelligent way to hold your components dynamically in a tabular format in a modern side panel.
 
-Below documentation is a 90& plagiarisation of Angular Mat Dialog documentation.
+Below documentation is a 90% plagiarisation of Angular Mat Dialog documentation.
 
 ## Overview
 
 The `NgsWorkspace` service can be used to open workspaces with Material Design styling and animations into a modern looking side panel.
 
 ![Sample Image](https://drive.google.com/uc?export=download&id=1kB_dhSB-bXnL5b0VMsVTUVdiOWCWrvT6)
+
+### [Demo Link](https://stackblitz.com/github/srukshan98/ngs-workspace-sample)
 
 The `NgsWorkspaceModule` should be added to the app module with optional default configuration.
 
