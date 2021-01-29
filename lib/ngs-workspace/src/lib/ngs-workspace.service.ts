@@ -1,5 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable, Injector } from '@angular/core';
+import { ComponentFactory, ComponentFactoryResolver, Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { WorkspaceDefaultConfig } from './config/default.config';
 import { IWorkspaceTabConfig } from './models/i-workspace-tab-config';
