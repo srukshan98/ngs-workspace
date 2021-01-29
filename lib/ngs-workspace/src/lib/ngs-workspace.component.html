@@ -1,11 +1,7 @@
 <div class="content">
+  <ng-content select="[ngsWorkspaceHeader]"></ng-content>
   <div class="row">
-    <div class="col-12">
-      <ng-content select="[ngsWorkspaceHeader]"></ng-content>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
+    <div class="col-12 px-0">
       <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
         <mat-tab *ngFor="let ref of references; let i = index">
           <ng-template mat-tab-label>
