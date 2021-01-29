@@ -18,6 +18,7 @@ export class WorkspaceDefaultConfig {
     maxTabCount: -1,
     placeholderComponent: NoTabComponent,
     direction: 'RTL',
+    showSideBtn: true
   };
 
   get config(): WorkspaceConfig<any> {

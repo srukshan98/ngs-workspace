@@ -1,3 +1,4 @@
+<ng-content select="[ngsWorkspaceHeader]"></ng-content>
 <div class="row">
   <div class="col-12">
     <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
@@ -17,12 +18,15 @@
     </mat-tab-group>
   </div>
 </div>
-<button mat-mini-fab color="primary" class="float-btn" *ngIf="config.direction === 'RTL'" (click)="minimize()">
-  <mat-icon>keyboard_arrow_right</mat-icon>
-</button>
-<button mat-mini-fab color="primary" class="float-btn btn-right" *ngIf="config.direction === 'LTR'" (click)="minimize()">
-  <mat-icon>keyboard_arrow_left</mat-icon>
-</button>
+<ng-container *ngIf="config.showSideBtn">
+  <button mat-mini-fab color="primary" class="float-btn" *ngIf="config.direction === 'RTL'" (click)="minimize()">
+    <mat-icon>keyboard_arrow_right</mat-icon>
+  </button>
+  <button mat-mini-fab color="primary" class="float-btn btn-right" *ngIf="config.direction === 'LTR'" (click)="minimize()">
+    <mat-icon>keyboard_arrow_left</mat-icon>
+  </button>
+</ng-container>
+
 <div class="x-resize" [class.resize-right]="config.direction === 'LTR'" cdkDrag (cdkDragMoved)="onDrag($event)" (cdkDragReleased)="dragStop($event)"></div>
 <ng-template #placeholder>
   <ng-container *ngComponentOutlet="config.placeholderComponent"></ng-container>

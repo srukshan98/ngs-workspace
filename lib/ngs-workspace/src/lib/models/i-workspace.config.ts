@@ -11,4 +11,5 @@ export class IWorkspaceConfig {
   maxTabCount?: number;
   placeholderComponent?: ComponentType<any>;
   direction?: 'RTL' | 'LTR';
+  showSideBtn?: boolean;
 }

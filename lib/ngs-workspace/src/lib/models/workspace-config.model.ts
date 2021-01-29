@@ -12,4 +12,5 @@ export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig
   maxTabCount?: number;
   placeholderComponent?: ComponentType<any>;
   direction: 'RTL' | 'LTR';
+  showSideBtn: boolean;
 }

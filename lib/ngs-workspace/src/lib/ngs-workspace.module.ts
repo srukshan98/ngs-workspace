@@ -9,12 +9,16 @@ import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IWorkspaceConfig } from './models/i-workspace.config';
 import { CONFIG } from './models/workspace-config.token';
+import { WorkspaceHeaderDirective } from './directives/workspace-header.directive';
+import { WorkspaceCloseDirective } from './directives/workspace-close.directive';
 
 
 @NgModule({
   declarations: [
     NgsWorkspaceComponent,
-    NoTabComponent
+    NoTabComponent,
+    WorkspaceHeaderDirective,
+    WorkspaceCloseDirective
   ],
   imports: [
     CommonModule,
@@ -23,7 +27,7 @@ import { CONFIG } from './models/workspace-config.token';
     DragDropModule,
     MatButtonModule
   ],
-  exports: [NgsWorkspaceComponent]
+  exports: [NgsWorkspaceComponent, WorkspaceHeaderDirective, WorkspaceCloseDirective]
 })
 export class NgsWorkspaceModule {
   constructor(@Optional() @SkipSelf() parentModule?: NgsWorkspaceModule) {

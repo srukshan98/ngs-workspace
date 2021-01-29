@@ -91,7 +91,39 @@ export class YourWorkspaceTab {
 }
 ```
 
+To Handle Errors Globally:
+
+```
+this.workspace.emitErrors.subscribe((err: WorkspaceErrorModel) => {
+  if (err.message) {
+    this.snackBar.open(err.message);
+  }
+});
+```
+
+To Add Custom header to workspace
+
+```
+<ngs-workspace>
+  <div ngsWorkspaceHeader class="header">
+    Workspace
+    <div class="close-btn" ngsWorkspaceClose>
+      <mat-icon>login</mat-icon>
+    </div>
+  </div>
+</ngs-workspace>
+```
+
 ## Versions
+
+### v0.1.2
+
+This Update include new features
+
+- Added the ability to change the direction of the workspace(RTL or LTR)
+- Added new Workspace header which can be added by a directive(ngsWorkspaceHeader)
+- Added new Workspace Close directive(ngsWorkspaceClose)
+- Added the ability to hide the side button
 
 ### v0.1.1
 
