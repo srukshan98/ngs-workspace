@@ -16,7 +16,8 @@ export class WorkspaceDefaultConfig {
     minimizeOnNavigation: false,
     width: '70vw',
     maxTabCount: -1,
-    placeholderComponent: NoTabComponent
+    placeholderComponent: NoTabComponent,
+    direction: 'RTL',
   };
 
   get config(): WorkspaceConfig<any> {

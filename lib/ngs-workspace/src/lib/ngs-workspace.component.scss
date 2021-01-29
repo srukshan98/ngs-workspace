@@ -30,6 +30,10 @@
   height: 25px;
   line-height: 20px;
   z-index: 1000;
+  &.btn-right {
+    left: auto;
+    right: -12px;
+  }
   ::ng-deep {
     .mat-button-wrapper {
       padding: 0;
@@ -49,6 +53,9 @@
   cursor: e-resize;
   z-index: 999;
   transition: box-shadow 500ms ease-in-out;
+  &.resize-right {
+    right: 0;
+  }
   // box-shadow: #90caf9 0 0 0 0 inset;
   // &:hover {
   //   box-shadow: #90caf9 3px 0 2px 0 inset;

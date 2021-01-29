@@ -33,10 +33,15 @@ import { NgsWorkspace } from './ngs-workspace.service';
 export class NgsWorkspaceComponent implements AfterViewInit {
   @HostBinding('style.width')
   width: string = String(this.defaults.config.width);
+  config: WorkspaceConfig<any> = this.defaults.config;
   @HostBinding('@slideInOut')
   get getSlideInOut(): string {
-    return this.workspaceService.slide.getValue();
+    return this.config.direction === 'RTL' ? this.workspaceService.slide.getValue() : (
+      this.workspaceService.slide.getValue() === 'in' ? 'in-rev' : 'out'
+    );
   }
+  @HostBinding('style.left') leftStyle = this.config.direction === 'RTL' ? 'auto' : '0';
+  @HostBinding('style.right') rightStyle = this.config.direction === 'LTR' ? 'auto' : '0';
 
   @ViewChildren('workspaceContainer', {
     read: ViewContainerRef
@@ -44,7 +49,6 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   containers: QueryList<ViewContainerRef>;
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
-  config: WorkspaceConfig<any> = this.defaults.config;
   constructor(
     private workspaceService: NgsWorkspace,
     private defaults: WorkspaceDefaultConfig,
@@ -173,7 +177,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
 
   onDrag({ pointerPosition: { x } }: { pointerPosition: { x: number; }; }): void {
     if (x !== 0) {
-      const width: number = window.innerWidth - x;
+      const width: number = this.config.direction === 'RTL' ? window.innerWidth - x : x;
 
       if (this.canWidthChange(width)) {
         this.width = `${width}px`;

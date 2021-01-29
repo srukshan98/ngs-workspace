@@ -17,10 +17,13 @@
     </mat-tab-group>
   </div>
 </div>
-<button mat-mini-fab color="primary" class="float-btn" (click)="minimize()">
+<button mat-mini-fab color="primary" class="float-btn" *ngIf="config.direction === 'RTL'" (click)="minimize()">
   <mat-icon>keyboard_arrow_right</mat-icon>
 </button>
-<div class="x-resize" cdkDrag (cdkDragMoved)="onDrag($event)" (cdkDragReleased)="dragStop($event)"></div>
+<button mat-mini-fab color="primary" class="float-btn btn-right" *ngIf="config.direction === 'LTR'" (click)="minimize()">
+  <mat-icon>keyboard_arrow_left</mat-icon>
+</button>
+<div class="x-resize" [class.resize-right]="config.direction === 'LTR'" cdkDrag (cdkDragMoved)="onDrag($event)" (cdkDragReleased)="dragStop($event)"></div>
 <ng-template #placeholder>
   <ng-container *ngComponentOutlet="config.placeholderComponent"></ng-container>
 </ng-template>

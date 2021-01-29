@@ -10,4 +10,5 @@ export class IWorkspaceConfig {
   width?: number | string;
   maxTabCount?: number;
   placeholderComponent?: ComponentType<any>;
+  direction?: 'RTL' | 'LTR';
 }
