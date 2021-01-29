@@ -1,24 +1,20 @@
 <div class="content">
   <ng-content select="[ngsWorkspaceHeader]"></ng-content>
-  <div class="row">
-    <div class="col-12 px-0">
-      <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
-        <mat-tab *ngFor="let ref of references; let i = index">
-          <ng-template mat-tab-label>
-            <div class="header-tab-body">
-              {{ref?.config.title}}
-              <button mat-icon-button (click)="onClose(ref, i)" [disabled]="ref?.config.disableClose">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </div>
-          </ng-template>
-          <div class="workspace-container">
-            <ng-container #workspaceContainer></ng-container>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-  </div>
+  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
+    <mat-tab *ngFor="let ref of references; let i = index">
+      <ng-template mat-tab-label>
+        <div class="header-tab-body">
+          {{ref?.config.title}}
+          <button mat-icon-button (click)="onClose(ref, i)" [disabled]="ref?.config.disableClose">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+      <div class="workspace-container">
+        <ng-container #workspaceContainer></ng-container>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 <ng-container *ngIf="config.showSideBtn">
   <button mat-mini-fab color="primary" class="float-btn" *ngIf="config.direction === 'RTL'" (click)="minimize()">
