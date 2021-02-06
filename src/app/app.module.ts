@@ -22,7 +22,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       classes: {
         container: ['cus'],
         tabContainer: ['custom-container'],
-      }
+      },
+      handleTabClose: false
     }),
     BrowserAnimationsModule,
     MaterialModule,

@@ -15,4 +15,5 @@ export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig
   direction: 'RTL' | 'LTR';
   showSideBtn: boolean;
   classes?: StyleType;
+  handleTabClose: boolean;
 }

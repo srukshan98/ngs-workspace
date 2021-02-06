@@ -14,4 +14,5 @@ export class IWorkspaceConfig {
   direction?: 'RTL' | 'LTR';
   showSideBtn?: boolean;
   classes?: StyleType;
+  handleTabClose?: boolean;
 }

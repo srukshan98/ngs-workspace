@@ -67,7 +67,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   }
 
   private setClasses() {
-    this.classes = this.defaults.config.classes ?? {};
+    this.classes = this.config.classes ?? {};
 
     this.classes.container = this.classes.container ?? [];
     this.classes.body = this.classes.body ?? [];
@@ -175,6 +175,13 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
 
   minimize(): void {
     this.workspaceService.slide.next('in');
+  }
+
+  onTabClose(ref: WorkspaceRef<any, any, any>): void {
+    this.workspaceService.onTabClosedSubject.next(ref);
+    if (this.config.handleTabClose) {
+      ref.close();
+    }
   }
 
   onClose(ref: WorkspaceRef<any, any, any>, data?: any): void {

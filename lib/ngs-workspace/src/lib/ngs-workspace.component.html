@@ -8,7 +8,7 @@
         <ng-template mat-tab-label>
           <div [class]="classes.tabLabel">
             {{ref?.config.title}}
-            <button mat-icon-button (click)="onClose(ref, i)" [disabled]="ref?.config.disableClose">
+            <button mat-icon-button (click)="onTabClose(ref)" [disabled]="ref?.config.disableClose">
               <mat-icon>cancel</mat-icon>
             </button>
           </div>

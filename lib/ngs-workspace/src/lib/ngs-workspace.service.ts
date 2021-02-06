@@ -17,6 +17,8 @@ export class NgsWorkspace {
   referenceSubject: BehaviorSubject<WorkspaceRef<any, any, any>> = new BehaviorSubject(null);
   afterAllClosedSubject: BehaviorSubject<void> = new BehaviorSubject<void>(null);
   afterAllClosed: Observable<void> = this.afterAllClosedSubject.asObservable();
+  onTabClosedSubject: Subject<WorkspaceTabRef<any>> = new Subject<WorkspaceTabRef<any>>();
+  onTabClosed: Observable<WorkspaceTabRef<any>> = this.onTabClosedSubject.asObservable();
   afterOpened: Subject<WorkspaceTabRef<any>> = new Subject<WorkspaceTabRef<any>>();
   openWorkspaces: WorkspaceTabRef<any>[] = [];
   emitErrors: Subject<WorkspaceErrorModel> = new Subject<WorkspaceErrorModel>();

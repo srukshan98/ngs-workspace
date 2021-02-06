@@ -115,7 +115,12 @@ this.workspace.attachHeader(header);
 ```
 
 ## Versions
+### v0.2.0-beta-2
 
+This Include breaking changes
+
+- Updated Customizable classes api to contain Container, Body, TabLabel and TabContainer
+- Exposed an external tab close handle
 ### v0.2.0-beta
 
 This Update include breaking changes and new features
