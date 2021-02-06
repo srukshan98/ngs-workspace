@@ -11,6 +11,7 @@ import { IWorkspaceConfig } from './models/i-workspace.config';
 import { CONFIG } from './models/workspace-config.token';
 import { WorkspaceHeaderDirective } from './directives/workspace-header.directive';
 import { WorkspaceCloseDirective } from './directives/workspace-close.directive';
+import { PortalModule } from '@angular/cdk/portal';
 
 
 @NgModule({
@@ -25,9 +26,10 @@ import { WorkspaceCloseDirective } from './directives/workspace-close.directive'
     MatTabsModule,
     MatIconModule,
     DragDropModule,
-    MatButtonModule
+    MatButtonModule,
+    PortalModule
   ],
-  exports: [NgsWorkspaceComponent, WorkspaceHeaderDirective, WorkspaceCloseDirective]
+  exports: [WorkspaceHeaderDirective, WorkspaceCloseDirective]
 })
 export class NgsWorkspaceModule {
   constructor(@Optional() @SkipSelf() parentModule?: NgsWorkspaceModule) {

@@ -19,6 +19,7 @@ export class NoTabComponent implements OnInit {
 	openTab(count = true): void {
 		const ref = this.workspaceService.open(TabComponent, {
 			title: 'New Tab' + (count ? ' ($$)' : ''),
+      data: { name: 'John' }
 		});
 		ref.onClose().subscribe((r) => {
 			console.log(r);

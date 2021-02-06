@@ -18,6 +18,7 @@ import { WorkspaceConfig } from './models/workspace-config.model';
 import { WorkspaceErrorTypes, WorkspaceErrorTypesV2 } from './models/workspace-error.types';
 import { WorkspaceRef } from './models/workspace-ref.model';
 import { NgsWorkspace } from './ngs-workspace.service';
+import { Portal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'ngs-workspace',
@@ -34,6 +35,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   @HostBinding('style.width')
   width: string = String(this.defaults.config.width);
   config: WorkspaceConfig<any> = this.defaults.config;
+  header: Portal<any> = null;
   @HostBinding('@slideInOut')
   get getSlideInOut(): string {
     return this.config.direction === 'RTL' ? this.workspaceService.slide.getValue() : (
@@ -49,8 +51,9 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   containers: QueryList<ViewContainerRef>;
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
+  workspaceService: NgsWorkspace;
+
   constructor(
-    private workspaceService: NgsWorkspace,
     private defaults: WorkspaceDefaultConfig,
     private cdr: ChangeDetectorRef,
     @Optional() private router: Router

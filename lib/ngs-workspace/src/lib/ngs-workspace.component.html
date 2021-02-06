@@ -1,5 +1,7 @@
 <div class="content">
-  <ng-content select="[ngsWorkspaceHeader]"></ng-content>
+  <ng-template [ngIf]="header">
+    <ng-template [cdkPortalOutlet]="header"></ng-template>
+  </ng-template>
   <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
     <mat-tab *ngFor="let ref of references; let i = index">
       <ng-template mat-tab-label>
