@@ -24,7 +24,8 @@ export class AppComponent {
       if (confirm('close Tab')) {
         ref.close();
       }
-    })
+    });
+    this.workspace.tabCount.subscribe(console.log);
   }
 
   toggleWorkspace(): void {

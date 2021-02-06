@@ -101,6 +101,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
         reference.OpenChanges.next();
         reference.TabVisitChanges.next(reference.componentRef.instance);
         this.workspaceService.afterOpened.next(reference);
+        this.workspaceService.tabCountSubject.next(this.references.length);
       }
       catch (e) {
         const err = {
@@ -178,7 +179,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   }
 
   onTabClose(ref: WorkspaceRef<any, any, any>): void {
-    this.workspaceService.onTabClosedSubject.next(ref);
+    this.workspaceService.onTabClosed.next(ref);
     if (this.config.handleTabClose) {
       ref.close();
     }
@@ -198,6 +199,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
     ref.OpenChanges.complete();
     ref.CloseChanges.next(data);
     ref.CloseChanges.complete();
+    this.workspaceService.tabCountSubject.next(this.references.length);
     if (this.references.length === 0) {
       this.minimize();
       ref.resetAll();

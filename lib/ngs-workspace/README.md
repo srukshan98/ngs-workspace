@@ -121,6 +121,7 @@ This Include breaking changes
 
 - Updated Customizable classes api to contain Container, Body, TabLabel and TabContainer
 - Exposed an external tab close handle
+- Exposed tab count observable
 ### v0.2.0-beta
 
 This Update include breaking changes and new features
