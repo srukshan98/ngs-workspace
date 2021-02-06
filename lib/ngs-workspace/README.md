@@ -116,7 +116,7 @@ this.workspace.attachHeader(header);
 
 ## Versions
 
-### v0.2.0
+### v0.2.0-beta
 
 This Update include breaking changes and new features
 

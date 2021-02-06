@@ -29,12 +29,6 @@ The `NgsWorkspaceModule` should be added to the app module with optional default
 export class AppModule { }
 ```
 
-The workspace component should be added to a top level component template. `eg. app.component.html`
-
-```
-<ngs-workspace></ngs-workspace>
-```
-
 A workspace is opened by calling the open method with a component to be loaded and an optional config object. The open method will return an instance of NgsWorkspaceTabRef:
 
 ```
@@ -91,7 +85,7 @@ export class YourWorkspaceTab {
 }
 ```
 
-To Handle Errors Globally:
+### Handling Errors Globally
 
 ```
 this.workspace.emitErrors.subscribe((err: WorkspaceErrorModel) => {
@@ -101,20 +95,36 @@ this.workspace.emitErrors.subscribe((err: WorkspaceErrorModel) => {
 });
 ```
 
-To Add Custom header to workspace
+### Adding Custom header to workspace
+
+Add this to any html template in your project
 
 ```
-<ngs-workspace>
-  <div ngsWorkspaceHeader class="header">
-    Workspace
-    <div class="close-btn" ngsWorkspaceClose>
-      <mat-icon>login</mat-icon>
-    </div>
+<div *ngsWorkspaceHeader class="header">
+  Workspace
+  <div class="close-btn" ngsWorkspaceClose>
+    <mat-icon>login</mat-icon>
   </div>
-</ngs-workspace>
+</div>
+```
+
+or attach the template Reference or Component to workspace service to dynamically set the header
+
+```
+this.workspace.attachHeader(header);
 ```
 
 ## Versions
+
+### v0.2.0-beta
+
+This Update include breaking changes and new features
+
+- The requirement to add the workspace component to a base component is now removed
+- The workspace component is not exposed
+- The method to add the workspace header has been altered
+- New API exposed from Workspace service to attach header dynamically
+- Exposed a Configuration to attach a custom class to workspace container "workspaceContainerClass"
 
 ### v0.1.2
 
