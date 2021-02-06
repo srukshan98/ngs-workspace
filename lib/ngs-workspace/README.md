@@ -115,14 +115,16 @@ this.workspace.attachHeader(header);
 ```
 
 ## Versions
+
 ### v0.2.0
 
 This Update include breaking changes and new features
 
- - The requirement to add the workspace component to a base component is now removed
- - The workspace component is not exposed
- - The method to add the workspace header has been altered
- - New API exposed from Workspace service to attach header dynamically
+- The requirement to add the workspace component to a base component is now removed
+- The workspace component is not exposed
+- The method to add the workspace header has been altered
+- New API exposed from Workspace service to attach header dynamically
+- Exposed a Configuration to attach a custom class to workspace container "workspaceContainerClass"
 
 ### v0.1.2
 

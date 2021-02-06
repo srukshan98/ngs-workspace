@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   HostBinding,
+  OnInit,
   Optional,
   QueryList,
   ViewChildren,
@@ -31,7 +32,7 @@ import { Portal } from '@angular/cdk/portal';
     slideInOutAnimation
   ]
 })
-export class NgsWorkspaceComponent implements AfterViewInit {
+export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   @HostBinding('style.width')
   width: string = String(this.defaults.config.width);
   config: WorkspaceConfig<any> = this.defaults.config;
@@ -52,12 +53,20 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
   workspaceService: NgsWorkspace;
+  containerClasses: string[] = [];
 
   constructor(
     private defaults: WorkspaceDefaultConfig,
     private cdr: ChangeDetectorRef,
     @Optional() private router: Router
   ) { }
+
+  ngOnInit(): void {
+    this.containerClasses.push('workspace-container');
+    if (this.defaults.config.workspaceContainerClass) {
+      this.containerClasses.push(this.defaults.config.workspaceContainerClass);
+    }
+  }
 
   ngAfterViewInit(): void {
     this.checkNavigationChanges();

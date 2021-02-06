@@ -18,7 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     NgsWorkspaceModule.forRoot({
       maxTabCount: 5,
-      placeholderComponent: NoTabComponent
+      placeholderComponent: NoTabComponent,
+      workspaceContainerClass: 'custom-container'
     }),
     BrowserAnimationsModule,
     MaterialModule,

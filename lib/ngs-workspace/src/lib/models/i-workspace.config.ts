@@ -12,4 +12,5 @@ export class IWorkspaceConfig {
   placeholderComponent?: ComponentType<any>;
   direction?: 'RTL' | 'LTR';
   showSideBtn?: boolean;
+  workspaceContainerClass?: string;
 }

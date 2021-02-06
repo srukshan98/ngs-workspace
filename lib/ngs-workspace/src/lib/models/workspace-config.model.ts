@@ -13,4 +13,5 @@ export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig
   placeholderComponent?: ComponentType<any>;
   direction: 'RTL' | 'LTR';
   showSideBtn: boolean;
+  workspaceContainerClass?: string;
 }
