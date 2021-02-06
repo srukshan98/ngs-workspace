@@ -20,6 +20,7 @@ import { WorkspaceErrorTypes, WorkspaceErrorTypesV2 } from './models/workspace-e
 import { WorkspaceRef } from './models/workspace-ref.model';
 import { NgsWorkspace } from './ngs-workspace.service';
 import { Portal } from '@angular/cdk/portal';
+import { StyleType } from './config/style.type';
 
 @Component({
   selector: 'ngs-workspace',
@@ -53,7 +54,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
   workspaceService: NgsWorkspace;
-  containerClasses: string[] = [];
+  classes: StyleType;
 
   constructor(
     private defaults: WorkspaceDefaultConfig,
@@ -62,10 +63,20 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    this.containerClasses.push('workspace-container');
-    if (this.defaults.config.workspaceContainerClass) {
-      this.containerClasses.push(this.defaults.config.workspaceContainerClass);
-    }
+    this.setClasses();
+  }
+
+  private setClasses() {
+    this.classes = this.defaults.config.classes ?? {};
+
+    this.classes.container = this.classes.container ?? [];
+    this.classes.body = this.classes.body ?? [];
+    this.classes.tabLabel = this.classes.tabLabel ?? [];
+    this.classes.tabContainer = this.classes.tabContainer ?? [];
+
+    this.classes.container.unshift('content');
+    this.classes.tabLabel.unshift('header-tab-body');
+    this.classes.tabContainer.unshift('workspace-container');
   }
 
   ngAfterViewInit(): void {

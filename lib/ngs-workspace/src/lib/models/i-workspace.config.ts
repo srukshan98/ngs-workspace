@@ -1,4 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
+import { StyleType } from '../config/style.type';
 
 
 export class IWorkspaceConfig {
@@ -12,5 +13,5 @@ export class IWorkspaceConfig {
   placeholderComponent?: ComponentType<any>;
   direction?: 'RTL' | 'LTR';
   showSideBtn?: boolean;
-  workspaceContainerClass?: string;
+  classes?: StyleType;
 }

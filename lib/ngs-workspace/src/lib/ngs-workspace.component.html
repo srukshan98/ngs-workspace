@@ -1,22 +1,24 @@
-<div class="content">
+<div [class]="classes.container">
   <ng-template [ngIf]="header">
     <ng-template [cdkPortalOutlet]="header"></ng-template>
   </ng-template>
-  <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
-    <mat-tab *ngFor="let ref of references; let i = index">
-      <ng-template mat-tab-label>
-        <div class="header-tab-body">
-          {{ref?.config.title}}
-          <button mat-icon-button (click)="onClose(ref, i)" [disabled]="ref?.config.disableClose">
-            <mat-icon>cancel</mat-icon>
-          </button>
+  <div [class]="classes.body">
+    <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
+      <mat-tab *ngFor="let ref of references; let i = index">
+        <ng-template mat-tab-label>
+          <div [class]="classes.tabLabel">
+            {{ref?.config.title}}
+            <button mat-icon-button (click)="onClose(ref, i)" [disabled]="ref?.config.disableClose">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+        <div [class]="classes.tabContainer">
+          <ng-container #workspaceContainer></ng-container>
         </div>
-      </ng-template>
-      <div [class]="containerClasses">
-        <ng-container #workspaceContainer></ng-container>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </div>
 <ng-container *ngIf="config.showSideBtn">
   <button mat-mini-fab color="primary" class="float-btn" *ngIf="config.direction === 'RTL'" (click)="minimize()">

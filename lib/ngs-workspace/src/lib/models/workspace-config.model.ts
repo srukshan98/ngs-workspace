@@ -1,4 +1,5 @@
 import { ComponentType } from '@angular/cdk/portal';
+import { StyleType } from '../config/style.type';
 import { IWorkspaceTabConfig } from './i-workspace-tab-config';
 import { IWorkspaceConfig } from './i-workspace.config';
 export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig<D> {
@@ -13,5 +14,5 @@ export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig
   placeholderComponent?: ComponentType<any>;
   direction: 'RTL' | 'LTR';
   showSideBtn: boolean;
-  workspaceContainerClass?: string;
+  classes?: StyleType;
 }
