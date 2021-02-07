@@ -1,6 +1,7 @@
+import { NgsWorkspaceInitializerService } from './ngs-workspace-initializer.service';
 import { WorkspaceDefaultConfig } from './config/default.config';
 import { NoTabComponent } from './no-tab/no-tab.component';
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { NgsWorkspaceComponent } from './ngs-workspace.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +14,7 @@ import { WorkspaceHeaderDirective } from './directives/workspace-header.directiv
 import { WorkspaceCloseDirective } from './directives/workspace-close.directive';
 import { PortalModule } from '@angular/cdk/portal';
 
-
+// @dynamic
 @NgModule({
   declarations: [
     NgsWorkspaceComponent,
@@ -44,7 +45,14 @@ export class NgsWorkspaceModule {
       ngModule: NgsWorkspaceModule,
       providers: [
         WorkspaceDefaultConfig,
-        { provide: CONFIG, useValue: config }
+        { provide: CONFIG, useValue: config },
+        NgsWorkspaceInitializerService,
+        {
+          provide: APP_INITIALIZER,
+          useFactory: (service: NgsWorkspaceInitializerService) => () => service.appendWorkspaceToBody(),
+          multi: true,
+          deps: [NgsWorkspaceInitializerService]
+        }
       ]
     };
   }

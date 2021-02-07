@@ -53,17 +53,21 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   containers: QueryList<ViewContainerRef>;
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
-  workspaceService: NgsWorkspace;
   classes: StyleType;
 
   constructor(
     private defaults: WorkspaceDefaultConfig,
     private cdr: ChangeDetectorRef,
+    private workspaceService: NgsWorkspace,
     @Optional() private router: Router
   ) { }
 
   ngOnInit(): void {
     this.setClasses();
+    this.workspaceService.header.subscribe((p: Portal<any>) => {
+      this.header = p;
+      this.cdr.detectChanges();
+    });
   }
 
   private setClasses() {

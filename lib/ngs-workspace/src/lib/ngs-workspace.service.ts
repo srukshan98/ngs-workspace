@@ -1,6 +1,6 @@
 import { NgsWorkspaceComponent } from './ngs-workspace.component';
 import { ComponentPortal, ComponentType, Portal, TemplatePortal } from '@angular/cdk/portal';
-import { ApplicationRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, Injectable, Injector, TemplateRef } from '@angular/core';
+import { ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable, Injector, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { WorkspaceDefaultConfig } from './config/default.config';
 import { IWorkspaceTabConfig } from './models/i-workspace-tab-config';
@@ -24,13 +24,12 @@ export class NgsWorkspace {
   openWorkspaces: WorkspaceTabRef<any>[] = [];
   emitErrors: Subject<WorkspaceErrorModel> = new Subject<WorkspaceErrorModel>();
   workspaceRef: ComponentRef<NgsWorkspaceComponent>;
+  private headerSubject: BehaviorSubject<Portal<any>> = new BehaviorSubject<Portal<any>>(null);
+  header: Observable<Portal<any>> = this.headerSubject.asObservable();
   constructor(
     private defaults: WorkspaceDefaultConfig,
-    private cfr: ComponentFactoryResolver,
-    private appRef: ApplicationRef,
-    private injector: Injector
+    private cfr: ComponentFactoryResolver
   ) {
-    this.appendWorkspaceToBody();
   }
   open<T, D, R>(template: ComponentType<T>, config?: IWorkspaceTabConfig<D>): WorkspaceTabRef<T, R> {
     const workspaceRef: WorkspaceRef<T, D, R> = new WorkspaceRef<T, D, R>(
@@ -71,20 +70,6 @@ export class NgsWorkspace {
     return this.openWorkspaces.find((workspace: WorkspaceTabRef<any>) => workspace.referenceId === id);
   }
 
-  private appendWorkspaceToBody(): void {
-    if (this.workspaceRef) { return; }
-
-    this.workspaceRef = this.cfr.resolveComponentFactory(NgsWorkspaceComponent).create(this.injector);
-    this.workspaceRef.instance.workspaceService = this;
-
-    this.appRef.attachView(this.workspaceRef.hostView);
-
-    const domElem: HTMLElement = (this.workspaceRef.hostView as EmbeddedViewRef<any>)
-      .rootNodes[0] as HTMLElement;
-
-    document.body.appendChild(domElem);
-  }
-
   attachHeader(headerRef: TemplateRef<any> | ComponentType<any>) {
     let portal: Portal<any>;
     if (headerRef instanceof TemplateRef) {
@@ -92,6 +77,6 @@ export class NgsWorkspace {
     } else {
       portal = new ComponentPortal(headerRef);
     }
-    this.workspaceRef.instance.header = portal;
+    this.headerSubject.next(portal);
   }
 }
