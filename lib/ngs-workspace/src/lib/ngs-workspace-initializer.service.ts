@@ -1,4 +1,4 @@
-import { ApplicationRef, ComponentFactoryResolver, EmbeddedViewRef, Injectable, Injector } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, EmbeddedViewRef, Injectable, Injector, RendererFactory2 } from '@angular/core';
 import { NgsWorkspaceComponent } from './ngs-workspace.component';
 
 @Injectable({
@@ -8,7 +8,8 @@ export class NgsWorkspaceInitializerService {
 
   constructor(
     private cfr: ComponentFactoryResolver,
-    private injector: Injector
+    private injector: Injector,
+    private rendererFactory: RendererFactory2
   ) {
   }
 
@@ -20,6 +21,6 @@ export class NgsWorkspaceInitializerService {
     const domElem: HTMLElement = (workspaceRef.hostView as EmbeddedViewRef<any>)
       .rootNodes[0] as HTMLElement;
 
-    document.body.appendChild(domElem);
+    this.rendererFactory.createRenderer(null, null).appendChild(document.body, domElem);
   }
 }
