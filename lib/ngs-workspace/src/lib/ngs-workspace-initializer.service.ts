@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { ApplicationRef, ComponentFactoryResolver, EmbeddedViewRef, Injectable, Injector, RendererFactory2 } from '@angular/core';
 import { NgsWorkspaceComponent } from './ngs-workspace.component';
 
@@ -21,6 +22,6 @@ export class NgsWorkspaceInitializerService {
     const domElem: HTMLElement = (workspaceRef.hostView as EmbeddedViewRef<any>)
       .rootNodes[0] as HTMLElement;
 
-    this.rendererFactory.createRenderer(null, null).appendChild(document.body, domElem);
+    setTimeout(() => this.rendererFactory.createRenderer(null, null).appendChild(this.injector.get(DOCUMENT).body, domElem));
   }
 }
