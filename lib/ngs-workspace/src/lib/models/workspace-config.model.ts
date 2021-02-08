@@ -16,4 +16,5 @@ export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig
   showSideBtn: boolean;
   classes?: StyleType;
   handleTabClose: boolean;
+  tabChangeAnimation: boolean;
 }

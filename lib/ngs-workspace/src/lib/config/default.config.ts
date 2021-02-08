@@ -19,7 +19,8 @@ export class WorkspaceDefaultConfig {
     placeholderComponent: NoTabComponent,
     direction: 'RTL',
     showSideBtn: true,
-    handleTabClose: true
+    handleTabClose: true,
+    tabChangeAnimation: true
   };
 
   get config(): WorkspaceConfig<any> {

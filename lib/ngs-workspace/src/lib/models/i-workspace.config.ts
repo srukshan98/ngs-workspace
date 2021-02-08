@@ -15,4 +15,5 @@ export class IWorkspaceConfig {
   showSideBtn?: boolean;
   classes?: StyleType;
   handleTabClose?: boolean;
+  tabChangeAnimation?: boolean;
 }

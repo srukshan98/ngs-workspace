@@ -305,6 +305,10 @@ const WORKSPACE_DATA: InjectionToken<string>
 ```
 
 # Versions
+
+### v0.2.0-beta.4
+
+This Includes bug fixes and new tab change animation disable api.
 ### v0.2.0-beta-2
 
 This Include breaking changes

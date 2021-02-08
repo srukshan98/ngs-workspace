@@ -3,7 +3,7 @@
     <ng-template [cdkPortalOutlet]="header"></ng-template>
   </ng-template>
   <div [class]="classes.body">
-    <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
+    <mat-tab-group [@.disabled]="!config.tabChangeAnimation" [selectedIndex]="selectedTabIndex" (selectedTabChange)="tabChange($event)" *ngIf="references.length > 0; else placeholder">
       <mat-tab *ngFor="let ref of references; let i = index">
         <ng-template mat-tab-label>
           <div [class]="classes.tabLabel">

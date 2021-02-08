@@ -23,7 +23,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         container: ['cus'],
         tabContainer: ['custom-container'],
       },
-      handleTabClose: false
+      handleTabClose: false,
+      tabChangeAnimation: false
     }),
     BrowserAnimationsModule,
     MaterialModule,
