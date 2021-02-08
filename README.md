@@ -138,6 +138,7 @@ Service to open NgsWorkspace Tab.
 | afterOpened: Subject<WorkspaceTabRef<any>> | Stream that emits when a tab has been opened. |
 | openWorkspaces: WorkspaceTabRef<any>[] | Keeps track of currently-open workspace tabs |
 | emitErrors: Subject<WorkspaceErrorModel> | Stream that emits all tab errors |
+
 <br/><br/>
 ### Methods
 | closeAll |
@@ -246,6 +247,7 @@ Reference to a tab opened via NgsWorkspace Service.
 | Gets an observable that is notified when the tab is been opened |
 | <b>Returns</b> |
 | Observable\<void\> |
+
 <br><br>
 
 ## Interfaces
@@ -263,6 +265,7 @@ Configuration for opening a workspace tab with the NgsWorkspace service
 | title?: string | Title of the Workspace tab |
 | data?: D \| null | Data being injected into the child component.|
 | disableClose?: boolean | Whether the user can click on the tab close button to close the modal |
+
 <br><br>
 
 ## WorkspaceErrorModel
@@ -278,6 +281,7 @@ Error Model Type the Workspace emits errors
 | errorV2: WorkspaceErrorTypesV2 | Error Type enum.|
 | message?: string | The Error message for the error, if any. |
 | content?: string | The Error content, if any. |
+
 <br><br>
 
 ## Type aliases
