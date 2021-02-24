@@ -39,10 +39,14 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   config: WorkspaceConfig<any> = this.defaults.config;
   header: Portal<any> = null;
   @HostBinding('@slideInOut')
-  get getSlideInOut(): string {
-    return this.config.direction === 'RTL' ? this.workspaceService.slide.getValue() : (
+  get getSlideInOut(): any {
+    const value = this.config.direction === 'RTL' ? this.workspaceService.slide.getValue() : (
       this.workspaceService.slide.getValue() === 'in' ? 'in-rev' : 'out'
     );
+    return {
+      value,
+      params: this.getAnimationParams()
+    };
   }
   @HostBinding('style.left') leftStyle = this.config.direction === 'RTL' ? 'auto' : '0';
   @HostBinding('style.right') rightStyle = this.config.direction === 'LTR' ? 'auto' : '0';
@@ -238,16 +242,17 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   dragStop(event: CdkDragRelease): void {
     event.source.element.nativeElement.style.removeProperty('transform');
   }
+
+  private getAnimationParams(): any {
+    return {
+      duration: this.config.animationDuration,
+      inOutTiming: this.config.animationTiming,
+    };
+  }
 }
 
 function getPxFromVw(value: string): number {
   value = value.replace('vw', '');
   const valueNum: number = parseFloat(value);
   return (document.documentElement.clientWidth / 100) * valueNum;
-}
-
-function delay(t) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve.bind(null), t);
-  });
 }

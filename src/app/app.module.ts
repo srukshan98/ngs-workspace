@@ -24,7 +24,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         tabContainer: ['custom-container'],
       },
       handleTabClose: false,
-      tabChangeAnimation: false
+      tabChangeAnimation: false,
+      animationDuration: 400,
+      animationTiming: 'linear'
     }),
     BrowserAnimationsModule,
     MaterialModule,

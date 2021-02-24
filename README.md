@@ -14,7 +14,7 @@ The `NgsWorkspace` service can be used to open workspaces with Material Design s
 
 ### [Demo Link](https://stackblitz.com/github/srukshan98/ngs-workspace-sample)
 
-The `NgsWorkspaceModule` should be added to the app module with optional default configuration.
+The `NgsWorkspaceModule` should be added to the app module with optional default configuration ([IWorkspaceConfig](##-IWorkspaceConfig)).
 
 ```
 @NgModule({
@@ -29,7 +29,7 @@ The `NgsWorkspaceModule` should be added to the app module with optional default
 export class AppModule { }
 ```
 
-A workspace is opened by calling the open method with a component to be loaded and an optional config object. The open method will return an instance of NgsWorkspaceTabRef:
+A workspace is opened by calling the open method with a component to be loaded and an optional config object ([IWorkspaceTabConfig](##-IWorkspaceTabConfig)). The open method will return an instance of [NgsWorkspaceTabRef](##-WorkspaceTabRef):
 
 ```
 let workspaceRef = workspace.open(UserProfileComponent, {
@@ -138,7 +138,6 @@ Service to open NgsWorkspace Tab.
 | afterOpened: Subject<WorkspaceTabRef<any>> | Stream that emits when a tab has been opened. |
 | openWorkspaces: WorkspaceTabRef<any>[] | Keeps track of currently-open workspace tabs |
 | emitErrors: Subject<WorkspaceErrorModel> | Stream that emits all tab errors |
-
 <br/><br/>
 ### Methods
 | closeAll |
@@ -247,7 +246,6 @@ Reference to a tab opened via NgsWorkspace Service.
 | Gets an observable that is notified when the tab is been opened |
 | <b>Returns</b> |
 | Observable\<void\> |
-
 <br><br>
 
 ## Interfaces
@@ -265,7 +263,32 @@ Configuration for opening a workspace tab with the NgsWorkspace service
 | title?: string | Title of the Workspace tab |
 | data?: D \| null | Data being injected into the child component.|
 | disableClose?: boolean | Whether the user can click on the tab close button to close the modal |
+<br><br>
 
+## IWorkspaceConfig
+
+Configuration for workspace module root function
+<br><br>
+
+### Properties
+
+| Name | Description |
+|---|---|
+| title?: string | Title of the Workspace tab |
+| disableClose?: boolean | Whether the user can click on the tab close button to close the modal |
+| minimizeOnNavigation?: boolean | Trigger the workspace to minimize on route change |
+| maxWidth?: number \| string | Set a maximum workspace width |
+| minWidth?: number \| string | Set a minimum workspace width |
+| width?: number \| string | Set the initial workspace width |
+| maxTabCount?: number | Limit the tab Count. Default to -1 (inifinite) |
+| placeholderComponent?: ComponentType<any> | Component to be rendered as empty workspace UI |
+| direction?: 'RTL' \| 'LTR' | Direction in which the workspace is expanded |
+| showSideBtn?: boolean | Set side button visibility |
+| classes?: StyleType | object of custom class names to customize workspace |
+| handleTabClose?: boolean | Disable workspace tab close button |
+| tabChangeAnimation?: boolean | Visibility of tab change animation |
+| animationDuration?: number | Duration of workspace animation in ms |
+| animationTiming?: WorkspaceAnimationTimingType | Workspace animation Timing Function |
 <br><br>
 
 ## WorkspaceErrorModel
@@ -281,7 +304,21 @@ Error Model Type the Workspace emits errors
 | errorV2: WorkspaceErrorTypesV2 | Error Type enum.|
 | message?: string | The Error message for the error, if any. |
 | content?: string | The Error content, if any. |
+<br><br>
 
+## StyleType
+
+Object of custom class names to customize workspace
+<br><br>
+
+### Properties
+
+| Name | Description |
+|---|---|
+| container?: string[] | Array of custom class names attached to workspace container |
+| body?: string[] | Array of custom class names attached to workspace tab body |
+| tabLabel?: string[] | Array of custom class names attached to workspace tab label |
+| tabContainer?: string[] | Array of custom class names attached to workspace tab container |
 <br><br>
 
 ## Type aliases
@@ -298,6 +335,17 @@ enum WorkspaceErrorTypesV2 {
 ```
 <br><br>
 
+### WorkspaceAnimationTimingType
+Animation timing function types
+```
+export type WorkspaceAnimationTimingType = 'ease'
+    | 'linear'
+    | 'ease-in'
+    | 'ease-out'
+    | 'ease-in-out';
+```
+<br><br>
+
 ## Constants
 <hr>
 
@@ -309,22 +357,22 @@ const WORKSPACE_DATA: InjectionToken<string>
 ```
 
 # Versions
-### v0.2.0-beta-2
 
-This Include breaking changes
 
-- Updated Customizable classes api to contain Container, Body, TabLabel and TabContainer
-- Exposed an external tab close handle
-- Exposed tab count observable
-### v0.2.0-beta
+### v0.2.0
 
-This Update include breaking changes and new features
+This Update include breaking changes, new features and some bug fixes
 
 - The requirement to add the workspace component to a base component is now removed
 - The workspace component is not exposed
 - The method to add the workspace header has been altered
 - New API exposed from Workspace service to attach header dynamically
 - Exposed a Configuration to attach a custom class to workspace container "workspaceContainerClass"
+- Updated Customizable classes api to contain Container, Body, TabLabel and TabContainer
+- Exposed an external tab close handle
+- Exposed tab count observable
+- New tab change animation disable api
+- Workspace animation customizability added
 
 ### v0.1.2
 

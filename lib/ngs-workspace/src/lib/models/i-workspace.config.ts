@@ -1,5 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { StyleType } from '../config/style.type';
+import { WorkspaceAnimationTimingType } from './workspace-animation-timing.type';
 
 
 export class IWorkspaceConfig {
@@ -16,4 +17,6 @@ export class IWorkspaceConfig {
   classes?: StyleType;
   handleTabClose?: boolean;
   tabChangeAnimation?: boolean;
+  animationDuration?: number;
+  animationTiming?: WorkspaceAnimationTimingType;
 }

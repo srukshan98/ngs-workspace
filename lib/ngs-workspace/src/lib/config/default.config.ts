@@ -20,7 +20,9 @@ export class WorkspaceDefaultConfig {
     direction: 'RTL',
     showSideBtn: true,
     handleTabClose: true,
-    tabChangeAnimation: true
+    tabChangeAnimation: true,
+    animationDuration: 400,
+    animationTiming: 'ease-in-out',
   };
 
   get config(): WorkspaceConfig<any> {
