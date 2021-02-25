@@ -58,6 +58,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
   classes: StyleType;
+  tabCountStore: {[key: string]: number} = {};
 
   constructor(
     private defaults: WorkspaceDefaultConfig,
@@ -94,6 +95,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
       try {
         if (!this.isValidReference(reference)) { return; }
 
+        this.setDisplayTitle(reference);
         this.references.push(reference);
         const index: number = this.references.length - 1;
         reference.close = (data?: any) => this.onClose(reference, data);
@@ -125,6 +127,18 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  setDisplayTitle(reference: WorkspaceRef<any, any, any>): void {
+    if (reference.config.title?.includes('$$')) {
+      if (!this.tabCountStore[reference.config.title]) {
+        this.tabCountStore[reference.config.title] = 0;
+      }
+      reference.displayTitle = reference.config.title.replace('$$', '' + (++this.tabCountStore[reference.config.title]));
+      return;
+    }
+    reference.displayTitle = reference.config.title;
+  }
+
   private checkNavigationChanges() {
     if (this.config.minimizeOnNavigation && this.router) {
       this.router.events.subscribe((e: Event) => {
@@ -137,7 +151,7 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   }
 
   isValidReference(reference: WorkspaceRef<any, any, any>) {
-    if (this.references.some(v => v && v.config.title === reference.config.title)) {
+    if (!reference.config.title.includes('$$') && this.references.some(v => v && v.config.title === reference.config.title)) {
       const err = {
         error: WorkspaceErrorTypes.Error,
         errorV2: WorkspaceErrorTypesV2.SIMILAR_TAB_ERROR,
@@ -208,11 +222,17 @@ export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
     ref.CloseChanges.next(data);
     ref.CloseChanges.complete();
     this.workspaceService.tabCountSubject.next(this.references.length);
+    this.resetTabCount(ref);
     if (this.references.length === 0) {
       this.minimize();
-      ref.resetAll();
       this.workspaceService.afterAllClosedSubject.next();
     }
+  }
+  resetTabCount(ref: WorkspaceRef<any, any, any>): void {
+    if (this.references.find((v: WorkspaceRef<any, any, any>) => v.config.title === ref.config.title)) {
+      return;
+    }
+    delete this.tabCountStore[ref.config.title];
   }
 
   onDrag({ pointerPosition: { x } }: { pointerPosition: { x: number; }; }): void {
