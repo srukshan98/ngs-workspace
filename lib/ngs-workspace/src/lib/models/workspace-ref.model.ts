@@ -21,12 +21,6 @@ export class WorkspaceRef<T, D, R> extends WorkspaceTabRef<T, R> {
   constructor(public component: ComponentType<T>, public config: WorkspaceConfig<D>) {
     super();
     this.referenceId = ++WorkspaceRef.currentReferenceNumber;
-    this.checkTitle();
-  }
-  private checkTitle(): void {
-    if (this.config.title.includes('$$')) {
-      this.config.title = this.config.title.replace('$$', `${this.referenceId}`);
-    }
   }
   onTabVisit(): Observable<T> {
     return this.TabVisitChanges.asObservable();
@@ -43,7 +37,4 @@ export class WorkspaceRef<T, D, R> extends WorkspaceTabRef<T, R> {
   minimize(): void { }
   close(data?: R): void { }
   selectTab(): void { }
-  resetAll(): void {
-    WorkspaceRef.currentReferenceNumber = 0;
-  }
 }

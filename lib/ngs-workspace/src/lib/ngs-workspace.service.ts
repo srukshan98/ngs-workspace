@@ -1,5 +1,6 @@
-import { ComponentType } from '@angular/cdk/portal';
-import { ComponentFactory, ComponentFactoryResolver, Injectable, Injector } from '@angular/core';
+import { NgsWorkspaceComponent } from './ngs-workspace.component';
+import { ComponentPortal, ComponentType, Portal, TemplatePortal } from '@angular/cdk/portal';
+import { ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable, Injector, TemplateRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { WorkspaceDefaultConfig } from './config/default.config';
 import { IWorkspaceTabConfig } from './models/i-workspace-tab-config';
@@ -16,13 +17,20 @@ export class NgsWorkspace {
   referenceSubject: BehaviorSubject<WorkspaceRef<any, any, any>> = new BehaviorSubject(null);
   afterAllClosedSubject: BehaviorSubject<void> = new BehaviorSubject<void>(null);
   afterAllClosed: Observable<void> = this.afterAllClosedSubject.asObservable();
+  tabCountSubject: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  tabCount: Observable<number> = this.tabCountSubject.asObservable();
+  onTabClosed: Subject<WorkspaceTabRef<any>> = new Subject<WorkspaceTabRef<any>>();
   afterOpened: Subject<WorkspaceTabRef<any>> = new Subject<WorkspaceTabRef<any>>();
   openWorkspaces: WorkspaceTabRef<any>[] = [];
   emitErrors: Subject<WorkspaceErrorModel> = new Subject<WorkspaceErrorModel>();
+  workspaceRef: ComponentRef<NgsWorkspaceComponent>;
+  private headerSubject: BehaviorSubject<Portal<any>> = new BehaviorSubject<Portal<any>>(null);
+  header: Observable<Portal<any>> = this.headerSubject.asObservable();
   constructor(
     private defaults: WorkspaceDefaultConfig,
-    private cfr: ComponentFactoryResolver,
-  ) { }
+    private cfr: ComponentFactoryResolver
+  ) {
+  }
   open<T, D, R>(template: ComponentType<T>, config?: IWorkspaceTabConfig<D>): WorkspaceTabRef<T, R> {
     const workspaceRef: WorkspaceRef<T, D, R> = new WorkspaceRef<T, D, R>(
       template,
@@ -60,5 +68,15 @@ export class NgsWorkspace {
 
   getWorkspaceById<T>(id: number): WorkspaceTabRef<T> | undefined {
     return this.openWorkspaces.find((workspace: WorkspaceTabRef<any>) => workspace.referenceId === id);
+  }
+
+  attachHeader(headerRef: TemplateRef<any> | ComponentType<any>) {
+    let portal: Portal<any>;
+    if (headerRef instanceof TemplateRef) {
+      portal = new TemplatePortal(headerRef, null);
+    } else {
+      portal = new ComponentPortal(headerRef);
+    }
+    this.headerSubject.next(portal);
   }
 }

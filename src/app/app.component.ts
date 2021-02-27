@@ -1,5 +1,5 @@
 import { TabComponent } from './tab/tab.component';
-import { NgsWorkspace, WorkspaceErrorModel } from 'ngs-workspace';
+import { NgsWorkspace, WorkspaceErrorModel, WorkspaceTabRef } from 'ngs-workspace';
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -20,6 +20,12 @@ export class AppComponent {
         this.snackBar.open(err.message);
       }
     });
+    this.workspace.onTabClosed.subscribe((ref: WorkspaceTabRef<any>) => {
+      if (confirm('close Tab')) {
+        ref.close();
+      }
+    });
+    this.workspace.tabCount.subscribe(console.log);
   }
 
   toggleWorkspace(): void {

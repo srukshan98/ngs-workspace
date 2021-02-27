@@ -6,7 +6,7 @@ This Library introduces an Intelligent way to hold your components dynamically i
 
 Below documentation is a 90% plagiarisation of Angular Mat Dialog documentation.
 
-## Overview
+# Overview
 
 The `NgsWorkspace` service can be used to open workspaces with Material Design styling and animations into a modern looking side panel.
 
@@ -14,7 +14,7 @@ The `NgsWorkspace` service can be used to open workspaces with Material Design s
 
 ### [Demo Link](https://stackblitz.com/github/srukshan98/ngs-workspace-sample)
 
-The `NgsWorkspaceModule` should be added to the app module with optional default configuration.
+The `NgsWorkspaceModule` should be added to the app module with optional default configuration ([IWorkspaceConfig](##-IWorkspaceConfig)).
 
 ```
 @NgModule({
@@ -29,13 +29,7 @@ The `NgsWorkspaceModule` should be added to the app module with optional default
 export class AppModule { }
 ```
 
-The workspace component should be added to a top level component template. `eg. app.component.html`
-
-```
-<ngs-workspace></ngs-workspace>
-```
-
-A workspace is opened by calling the open method with a component to be loaded and an optional config object. The open method will return an instance of NgsWorkspaceTabRef:
+A workspace is opened by calling the open method with a component to be loaded and an optional config object ([IWorkspaceTabConfig](##-IWorkspaceTabConfig)). The open method will return an instance of [NgsWorkspaceTabRef](##-WorkspaceTabRef):
 
 ```
 let workspaceRef = workspace.open(UserProfileComponent, {
@@ -91,7 +85,7 @@ export class YourWorkspaceTab {
 }
 ```
 
-To Handle Errors Globally:
+### Handling Errors Globally
 
 ```
 this.workspace.emitErrors.subscribe((err: WorkspaceErrorModel) => {
@@ -101,20 +95,284 @@ this.workspace.emitErrors.subscribe((err: WorkspaceErrorModel) => {
 });
 ```
 
-To Add Custom header to workspace
+### Adding Custom header to workspace
+
+Add this to any html template in your project
 
 ```
-<ngs-workspace>
-  <div ngsWorkspaceHeader class="header">
-    Workspace
-    <div class="close-btn" ngsWorkspaceClose>
-      <mat-icon>login</mat-icon>
-    </div>
+<div *ngsWorkspaceHeader class="header">
+  Workspace
+  <div class="close-btn" ngsWorkspaceClose>
+    <mat-icon>login</mat-icon>
   </div>
-</ngs-workspace>
+</div>
 ```
 
-## Versions
+or attach the template Reference or Component to workspace service to dynamically set the header
+
+```
+this.workspace.attachHeader(header);
+```
+
+# API reference
+
+```
+import {NgsWorkspaceModule} from 'ngs-workspace';
+```
+
+## Services
+<hr>
+
+## NgsWorkspace
+
+Service to open NgsWorkspace Tab.
+<br/><br/>
+### Properties
+
+| Name | Description |
+|---|---|
+| slide: BehaviorSubject<'in' \| 'out'> | Slide in and out the workspace |
+| afterAllClosed: Observable<void> | Stream that emits when all open tabs have finished closing.|
+| tabCount: Observable<number> | An Observable that will emit on Tab count changes |
+| onTabClosed: Subject<WorkspaceTabRef<any>> | An observable which will emit if a tab is closed |
+| afterOpened: Subject<WorkspaceTabRef<any>> | Stream that emits when a tab has been opened. |
+| openWorkspaces: WorkspaceTabRef<any>[] | Keeps track of currently-open workspace tabs |
+| emitErrors: Subject<WorkspaceErrorModel> | Stream that emits all tab errors |
+<br/><br/>
+### Methods
+| closeAll |
+|---|
+| Close all of the currently-open tabs |
+<br/>
+
+| getWorkspaceById ||
+|---|---|
+| Finds an open tab by its id ||
+| **Parameters** ||
+| id<br>*number* | ID to use when looking up the tab|
+| <b>Returns</b> ||
+| WorkspaceTabRef\<T\> \| undefined ||
+
+<br/>
+
+| open ||
+|---|---|
+| Opens a workspace tab containing the given component ||
+| **Parameters** ||
+| component<br>*ComponentType\<T\>* | Type of the component to load into the tab |
+| config?<br>*IWorkspaceTabConfig\<D\>* | Extra Configuration Options |
+| <b>Returns</b> ||
+| WorkspaceTabRef\<T, R\> ||
+
+<br/>
+
+| attachHeader ||
+|---|---|
+| Attach the given component or Template as the workspace header ||
+| **Parameters** ||
+| headerRef<br>*TemplateRef\<any\> \| ComponentType\<any\>* | Type of the component or Template to load as the header |
+<br/>
+
+## Directives
+<hr>
+
+## WorkspaceClose
+
+Button that will close the current workspace tab
+
+Selector: ```[ngsWorkspaceClose]```
+
+<br/>
+
+## WorkspaceHeader
+
+A structural directive which will take it's content and add it to the workspace header.
+
+Selector: ```[ngsWorkspaceHeader]```
+<br><br>
+
+## Classes
+<hr>
+
+## WorkspaceTabRef
+
+Reference to a tab opened via NgsWorkspace Service.
+<br><br>
+
+### Properties
+
+| Name | Description |
+|---|---|
+| referenceId: number ||
+| componentRef: ComponentRef\<T\> | reference to component opened in tab |
+<br><br>
+
+### Methods
+| close ||
+|---|---|
+| Close current workspace tab ||
+| **Parameters** ||
+| data<br>*R* | Data to passes down to parent component |
+<br>
+
+| minimize |
+|---|
+| Minimize the workspace |
+<br>
+
+| onTabVisit |
+|---|
+| Gets an observable that is notified when the tab is been visited |
+| <b>Returns</b> |
+| Observable\<T\> |
+<br>
+
+| onTabLeave |
+|---|
+| Gets an observable that is notified when the tab is been left |
+| <b>Returns</b> |
+| Observable\<void\> |
+<br>
+
+| onClose |
+|---|
+| Gets an observable that is notified when the tab is been closed |
+| <b>Returns</b> |
+| Observable\<R \| undefined\> |
+<br>
+
+| onOpen |
+|---|
+| Gets an observable that is notified when the tab is been opened |
+| <b>Returns</b> |
+| Observable\<void\> |
+<br><br>
+
+## Interfaces
+<hr>
+
+## IWorkspaceTabConfig
+
+Configuration for opening a workspace tab with the NgsWorkspace service
+<br><br>
+
+### Properties
+
+| Name | Description |
+|---|---|
+| title?: string | Title of the Workspace tab |
+| data?: D \| null | Data being injected into the child component.|
+| disableClose?: boolean | Whether the user can click on the tab close button to close the modal |
+<br><br>
+
+## IWorkspaceConfig
+
+Configuration for workspace module root function
+<br><br>
+
+### Properties
+
+| Name | Description |
+|---|---|
+| title?: string | Title of the Workspace tab |
+| disableClose?: boolean | Whether the user can click on the tab close button to close the modal |
+| minimizeOnNavigation?: boolean | Trigger the workspace to minimize on route change |
+| maxWidth?: number \| string | Set a maximum workspace width |
+| minWidth?: number \| string | Set a minimum workspace width |
+| width?: number \| string | Set the initial workspace width |
+| maxTabCount?: number | Limit the tab Count. Default to -1 (inifinite) |
+| placeholderComponent?: ComponentType<any> | Component to be rendered as empty workspace UI |
+| direction?: 'RTL' \| 'LTR' | Direction in which the workspace is expanded |
+| showSideBtn?: boolean | Set side button visibility |
+| classes?: StyleType | object of custom class names to customize workspace |
+| handleTabClose?: boolean | Disable workspace tab close button |
+| tabChangeAnimation?: boolean | Visibility of tab change animation |
+| animationDuration?: number | Duration of workspace animation in ms |
+| animationTiming?: WorkspaceAnimationTimingType | Workspace animation Timing Function |
+<br><br>
+
+## WorkspaceErrorModel
+
+Error Model Type the Workspace emits errors
+<br><br>
+
+### Properties
+
+| Name | Description |
+|---|---|
+| ref: WorkspaceTabRef\<any\> | Reference the Workspace tab |
+| errorV2: WorkspaceErrorTypesV2 | Error Type enum.|
+| message?: string | The Error message for the error, if any. |
+| content?: string | The Error content, if any. |
+<br><br>
+
+## StyleType
+
+Object of custom class names to customize workspace
+<br><br>
+
+### Properties
+
+| Name | Description |
+|---|---|
+| container?: string[] | Array of custom class names attached to workspace container |
+| body?: string[] | Array of custom class names attached to workspace tab body |
+| tabLabel?: string[] | Array of custom class names attached to workspace tab label |
+| tabContainer?: string[] | Array of custom class names attached to workspace tab container |
+<br><br>
+
+## Type aliases
+<hr>
+
+### WorkspaceErrorTypesV2
+The enum type of error that is thrown.
+```
+enum WorkspaceErrorTypesV2 {
+  SIMILAR_TAB_ERROR,
+  MAX_TAB_COUNT_EXCEEDED_ERROR,
+  CONSOLE_ERROR
+}
+```
+<br><br>
+
+### WorkspaceAnimationTimingType
+Animation timing function types
+```
+export type WorkspaceAnimationTimingType = 'ease'
+    | 'linear'
+    | 'ease-in'
+    | 'ease-out'
+    | 'ease-in-out';
+```
+<br><br>
+
+## Constants
+<hr>
+
+### WORKSPACE_DATA
+Injection token that can be used to access the data that was passed in to a tab.
+
+```
+const WORKSPACE_DATA: InjectionToken<string>
+```
+
+# Versions
+
+
+### v0.2.0
+
+This Update include breaking changes, new features and some bug fixes
+
+- The requirement to add the workspace component to a base component is now removed
+- The workspace component is not exposed
+- The method to add the workspace header has been altered
+- New API exposed from Workspace service to attach header dynamically
+- Exposed a Configuration to attach a custom class to workspace container "workspaceContainerClass"
+- Updated Customizable classes api to contain Container, Body, TabLabel and TabContainer
+- Exposed an external tab close handle
+- Exposed tab count observable
+- New tab change animation disable api
+- Workspace animation customizability added
 
 ### v0.1.2
 
@@ -146,10 +404,6 @@ This update include several bug and performance enhancement.
 - Default Error Enum is Deprecated
 - New Error Enum added with Better description
 
-## API
-
-#### Coming Soon
-
-## Collaboration
+# Collaboration
 
 Please create a Github Issues to inform any issues and suggestions, also you can fix any code issues you find and create a pull request to integrate.

@@ -1,6 +1,8 @@
 import { ComponentType } from '@angular/cdk/portal';
+import { StyleType } from '../config/style.type';
 import { IWorkspaceTabConfig } from './i-workspace-tab-config';
 import { IWorkspaceConfig } from './i-workspace.config';
+import { WorkspaceAnimationTimingType } from './workspace-animation-timing.type';
 export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig<D> {
   title?: string;
   minimizeOnNavigation?: boolean;
@@ -13,4 +15,9 @@ export class WorkspaceConfig<D> implements IWorkspaceConfig, IWorkspaceTabConfig
   placeholderComponent?: ComponentType<any>;
   direction: 'RTL' | 'LTR';
   showSideBtn: boolean;
+  classes?: StyleType;
+  handleTabClose: boolean;
+  tabChangeAnimation: boolean;
+  animationDuration: number;
+  animationTiming: WorkspaceAnimationTimingType;
 }

@@ -3,7 +3,6 @@
  */
 
 export * from './lib/ngs-workspace.service';
-export * from './lib/ngs-workspace.component';
 export * from './lib/ngs-workspace.module';
 export * from './lib/models/workspace-data.token';
 export * from './lib/models/workspace-ref.model';

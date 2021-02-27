@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   HostBinding,
+  OnInit,
   Optional,
   QueryList,
   ViewChildren,
@@ -18,6 +19,8 @@ import { WorkspaceConfig } from './models/workspace-config.model';
 import { WorkspaceErrorTypes, WorkspaceErrorTypesV2 } from './models/workspace-error.types';
 import { WorkspaceRef } from './models/workspace-ref.model';
 import { NgsWorkspace } from './ngs-workspace.service';
+import { Portal } from '@angular/cdk/portal';
+import { StyleType } from './config/style.type';
 
 @Component({
   selector: 'ngs-workspace',
@@ -30,15 +33,20 @@ import { NgsWorkspace } from './ngs-workspace.service';
     slideInOutAnimation
   ]
 })
-export class NgsWorkspaceComponent implements AfterViewInit {
+export class NgsWorkspaceComponent implements OnInit, AfterViewInit {
   @HostBinding('style.width')
   width: string = String(this.defaults.config.width);
   config: WorkspaceConfig<any> = this.defaults.config;
+  header: Portal<any> = null;
   @HostBinding('@slideInOut')
-  get getSlideInOut(): string {
-    return this.config.direction === 'RTL' ? this.workspaceService.slide.getValue() : (
+  get getSlideInOut(): any {
+    const value = this.config.direction === 'RTL' ? this.workspaceService.slide.getValue() : (
       this.workspaceService.slide.getValue() === 'in' ? 'in-rev' : 'out'
     );
+    return {
+      value,
+      params: this.getAnimationParams()
+    };
   }
   @HostBinding('style.left') leftStyle = this.config.direction === 'RTL' ? 'auto' : '0';
   @HostBinding('style.right') rightStyle = this.config.direction === 'LTR' ? 'auto' : '0';
@@ -49,12 +57,36 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   containers: QueryList<ViewContainerRef>;
   references: WorkspaceRef<any, any, any>[] = [];
   selectedTabIndex = -1;
+  classes: StyleType;
+  tabCountStore: {[key: string]: number} = {};
+
   constructor(
-    private workspaceService: NgsWorkspace,
     private defaults: WorkspaceDefaultConfig,
     private cdr: ChangeDetectorRef,
+    private workspaceService: NgsWorkspace,
     @Optional() private router: Router
   ) { }
+
+  ngOnInit(): void {
+    this.setClasses();
+    this.workspaceService.header.subscribe((p: Portal<any>) => {
+      this.header = p;
+      this.cdr.detectChanges();
+    });
+  }
+
+  private setClasses() {
+    this.classes = this.config.classes ?? {};
+
+    this.classes.container = this.classes.container ?? [];
+    this.classes.body = this.classes.body ?? [];
+    this.classes.tabLabel = this.classes.tabLabel ?? [];
+    this.classes.tabContainer = this.classes.tabContainer ?? [];
+
+    this.classes.container.unshift('content');
+    this.classes.tabLabel.unshift('header-tab-body');
+    this.classes.tabContainer.unshift('workspace-container');
+  }
 
   ngAfterViewInit(): void {
     this.checkNavigationChanges();
@@ -63,6 +95,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
       try {
         if (!this.isValidReference(reference)) { return; }
 
+        this.setDisplayTitle(reference);
         this.references.push(reference);
         const index: number = this.references.length - 1;
         reference.close = (data?: any) => this.onClose(reference, data);
@@ -78,6 +111,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
         reference.OpenChanges.next();
         reference.TabVisitChanges.next(reference.componentRef.instance);
         this.workspaceService.afterOpened.next(reference);
+        this.workspaceService.tabCountSubject.next(this.references.length);
       }
       catch (e) {
         const err = {
@@ -93,6 +127,18 @@ export class NgsWorkspaceComponent implements AfterViewInit {
       }
     });
   }
+
+  setDisplayTitle(reference: WorkspaceRef<any, any, any>): void {
+    if (reference.config.title?.includes('$$')) {
+      if (!this.tabCountStore[reference.config.title]) {
+        this.tabCountStore[reference.config.title] = 0;
+      }
+      reference.displayTitle = reference.config.title.replace('$$', '' + (++this.tabCountStore[reference.config.title]));
+      return;
+    }
+    reference.displayTitle = reference.config.title;
+  }
+
   private checkNavigationChanges() {
     if (this.config.minimizeOnNavigation && this.router) {
       this.router.events.subscribe((e: Event) => {
@@ -105,7 +151,7 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   }
 
   isValidReference(reference: WorkspaceRef<any, any, any>) {
-    if (this.references.some(v => v && v.config.title === reference.config.title)) {
+    if (!reference.config.title.includes('$$') && this.references.some(v => v && v.config.title === reference.config.title)) {
       const err = {
         error: WorkspaceErrorTypes.Error,
         errorV2: WorkspaceErrorTypesV2.SIMILAR_TAB_ERROR,
@@ -154,6 +200,13 @@ export class NgsWorkspaceComponent implements AfterViewInit {
     this.workspaceService.slide.next('in');
   }
 
+  onTabClose(ref: WorkspaceRef<any, any, any>): void {
+    this.workspaceService.onTabClosed.next(ref);
+    if (this.config.handleTabClose) {
+      ref.close();
+    }
+  }
+
   onClose(ref: WorkspaceRef<any, any, any>, data?: any): void {
     const index: number = this.references.findIndex((v: WorkspaceRef<any, any, any>) => v === ref);
     if (index !== -1) {
@@ -168,11 +221,18 @@ export class NgsWorkspaceComponent implements AfterViewInit {
     ref.OpenChanges.complete();
     ref.CloseChanges.next(data);
     ref.CloseChanges.complete();
+    this.workspaceService.tabCountSubject.next(this.references.length);
+    this.resetTabCount(ref);
     if (this.references.length === 0) {
       this.minimize();
-      ref.resetAll();
       this.workspaceService.afterAllClosedSubject.next();
     }
+  }
+  resetTabCount(ref: WorkspaceRef<any, any, any>): void {
+    if (this.references.find((v: WorkspaceRef<any, any, any>) => v.config.title === ref.config.title)) {
+      return;
+    }
+    delete this.tabCountStore[ref.config.title];
   }
 
   onDrag({ pointerPosition: { x } }: { pointerPosition: { x: number; }; }): void {
@@ -202,16 +262,17 @@ export class NgsWorkspaceComponent implements AfterViewInit {
   dragStop(event: CdkDragRelease): void {
     event.source.element.nativeElement.style.removeProperty('transform');
   }
+
+  private getAnimationParams(): any {
+    return {
+      duration: this.config.animationDuration,
+      inOutTiming: this.config.animationTiming,
+    };
+  }
 }
 
 function getPxFromVw(value: string): number {
   value = value.replace('vw', '');
   const valueNum: number = parseFloat(value);
   return (document.documentElement.clientWidth / 100) * valueNum;
-}
-
-function delay(t) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve.bind(null), t);
-  });
 }

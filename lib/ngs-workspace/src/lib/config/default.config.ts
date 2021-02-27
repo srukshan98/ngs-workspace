@@ -18,7 +18,11 @@ export class WorkspaceDefaultConfig {
     maxTabCount: -1,
     placeholderComponent: NoTabComponent,
     direction: 'RTL',
-    showSideBtn: true
+    showSideBtn: true,
+    handleTabClose: true,
+    tabChangeAnimation: true,
+    animationDuration: 400,
+    animationTiming: 'ease-in-out',
   };
 
   get config(): WorkspaceConfig<any> {
